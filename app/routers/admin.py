@@ -412,18 +412,28 @@ async def ai_generate(
     admin: Admin = Depends(require_admin),
     db: Session = Depends(get_db),
 ):
+    import asyncio
+    from app.database import SessionLocal
+
     category = None
     if category_slug:
         category = db.query(Category).filter(Category.slug == category_slug).first()
 
-    try:
-        post = await generate_ai_draft(db, category=category)
-        if post:
-            return RedirectResponse(f"/admin/posts/{post.id}/edit", status_code=302)
-    except Exception as e:
-        pass
+    # 백그라운드에서 실행 (타임아웃 방지)
+    async def run_in_background(cat):
+        bg_db = SessionLocal()
+        try:
+            await generate_ai_draft(bg_db, category=cat)
+        except Exception as e:
+            import logging
+            logging.getLogger("logit.ai").error(f"[AI] 백그라운드 생성 실패: {e}")
+        finally:
+            bg_db.close()
 
-    return RedirectResponse("/admin/dashboard?error=ai_failed", status_code=302)
+    asyncio.create_task(run_in_background(category))
+
+    # 즉시 대시보드로 이동 (생성은 백그라운드에서 계속)
+    return RedirectResponse("/admin/dashboard?ai=generating", status_code=302)
 
 
 # ── AI 생성 로그 ─────────────────────────────────────────────

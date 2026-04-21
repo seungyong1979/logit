@@ -5,18 +5,27 @@
 <div class="admin-page-header">
   <h1 class="admin-page-title">대시보드</h1>
   <div class="admin-page-actions">
-    <form method="post" action="/admin/ai/generate" style="display:inline">
+    <form method="post" action="/admin/ai/generate" style="display:inline" id="ai-generate-form">
       <select name="category_slug" class="form-select-sm">
         <option value="">카테고리 랜덤</option>
         {% for cat in sidebar_categories if sidebar_categories is defined %}
         <option value="{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</option>
         {% endfor %}
       </select>
-      <button type="submit" class="btn btn-ai">🤖 AI 초안 생성</button>
+      <button type="submit" class="btn btn-ai" id="ai-generate-btn">🤖 AI 초안 생성</button>
     </form>
+    <div id="ai-loading" style="display:none; margin-left:10px; color:#6c63ff; font-size:14px;">
+      ⏳ AI 글 + 이미지 생성 중... (30초~1분 소요)
+    </div>
     <a href="/admin/posts/new" class="btn btn-primary">✏️ 새 글 작성</a>
   </div>
 </div>
+
+{% if request.query_params.get('ai') == 'generating' %}
+<div class="alert alert-info" style="margin-bottom:16px; background:#e8f4fd; border:1px solid #6c63ff; border-radius:8px; padding:12px 16px; color:#333;">
+  ⏳ <strong>AI 초안 생성 중입니다!</strong> 글 작성 + 이미지 생성까지 약 30초~1분 소요됩니다. 잠시 후 페이지를 새로고침하면 초안이 나타납니다.
+</div>
+{% endif %}
 
 {# 통계 카드 #}
 <div class="stats-grid">
@@ -165,4 +174,14 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('ai-generate-form').addEventListener('submit', function() {
+  document.getElementById('ai-generate-btn').disabled = true;
+  document.getElementById('ai-generate-btn').textContent = '⏳ 생성 중...';
+  document.getElementById('ai-loading').style.display = 'inline';
+});
+</script>
 {% endblock %}
