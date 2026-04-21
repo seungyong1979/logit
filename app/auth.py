@@ -17,12 +17,15 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # ── 비밀번호 ────────────────────────────────────────────────
 def hash_password(password: str) -> str:
-    # bcrypt 72바이트 제한 처리
-    return pwd_context.hash(password.encode("utf-8")[:72])
+    import bcrypt as _bcrypt
+    pw = password.encode("utf-8")[:72]
+    return _bcrypt.hashpw(pw, _bcrypt.gensalt()).decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain.encode("utf-8")[:72], hashed)
+    import bcrypt as _bcrypt
+    pw = plain.encode("utf-8")[:72]
+    return _bcrypt.checkpw(pw, hashed.encode("utf-8"))
 
 
 # ── JWT ─────────────────────────────────────────────────────
