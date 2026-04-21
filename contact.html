@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — 문의하기 | Logit</title>
+  <meta name="description" content="Logit 블로그에 문의하세요. 피드백, 오류 제보, 협업 문의 등 언제든 환영합니다.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://logit.kr/contact">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="site-logo" aria-label="Logit 홈으로">
+        <div class="logo-mark">
+          <svg viewBox="0 0 18 18"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="10" y="2" width="6" height="6" rx="1" opacity="0.6"/><rect x="2" y="10" width="6" height="6" rx="1" opacity="0.6"/><rect x="10" y="10" width="6" height="6" rx="1"/></svg>
+        </div>
+        <span class="logo-text">Log<span>it</span></span>
+      </a>
+      <nav class="main-nav">
+        <a href="/category.html?cat=ai">AI 활용</a>
+        <a href="/category.html?cat=automation">자동화</a>
+        <a href="/category.html?cat=productivity">생산성</a>
+        <a href="/about.html">About</a>
+      </nav>
+      <div class="header-actions">
+        <button class="search-toggle" id="searchToggle" aria-label="검색">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M15 15l3 3"/></svg>
+        </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h16M3 11h16M3 16h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+    <nav class="mobile-nav-links">
+      <a href="/">🏠 홈</a>
+      <a href="/about.html">👤 About</a>
+      <a href="/contact.html">📬 Contact</a>
+    </nav>
+  </div>
+
+  <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true">
+    <div class="search-box">
+      <div class="search-input-wrapper">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M15 15l3 3"/></svg>
+        <input type="search" class="search-input" id="searchInput" placeholder="검색어를 입력하세요..." autocomplete="off">
+      </div>
+      <div class="search-results-preview" id="searchResults"></div>
+    </div>
+  </div>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container">
+      <div>
+        <h1 class="page-title">문의하기</h1>
+        <p class="page-description">피드백, 오류 제보, 협업 제안 등 어떤 내용이든 환영합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <main id="main-content">
+    <div class="container" style="padding-top:3rem; padding-bottom:5rem;">
+      <div style="display:grid; grid-template-columns:1fr 380px; gap:3rem; max-width:900px; margin:0 auto;">
+
+        <!-- 문의 폼 -->
+        <div>
+          <h2 style="font-size:var(--text-xl); font-weight:700; margin-bottom:1.5rem; letter-spacing:-0.02em;">메시지 보내기</h2>
+
+          <form id="contactForm" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="contact-type">문의 유형 <span style="color:var(--color-danger);">*</span></label>
+              <select class="form-input form-select" id="contact-type" required>
+                <option value="">선택해주세요</option>
+                <option value="feedback">글 피드백 / 오류 제보</option>
+                <option value="collab">협업 제안</option>
+                <option value="question">질문</option>
+                <option value="other">기타</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-name">이름 (닉네임 가능) <span style="color:var(--color-danger);">*</span></label>
+              <input type="text" class="form-input" id="contact-name" placeholder="홍길동" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-email">이메일 주소 <span style="color:var(--color-danger);">*</span></label>
+              <input type="email" class="form-input" id="contact-email" placeholder="example@email.com" required>
+              <p class="form-hint">답변을 받으실 이메일 주소를 입력해주세요.</p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-subject">제목</label>
+              <input type="text" class="form-input" id="contact-subject" placeholder="문의 제목 (선택사항)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contact-message">내용 <span style="color:var(--color-danger);">*</span></label>
+              <textarea class="form-input form-textarea" id="contact-message" placeholder="문의 내용을 자세히 적어주세요." required></textarea>
+              <p class="form-hint">스팸 방지를 위해 내용을 구체적으로 작성해주시면 빠른 답변에 도움이 됩니다.</p>
+            </div>
+
+            <div class="form-group" style="display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:1.5rem;">
+              <input type="checkbox" id="privacy-agree" style="margin-top:3px; width:16px; height:16px; flex-shrink:0; cursor:pointer;">
+              <label for="privacy-agree" style="font-size:var(--text-sm); color:var(--color-text-secondary); cursor:pointer;">
+                <a href="/privacy.html" style="color:var(--color-primary);">개인정보처리방침</a>에 동의하며, 문의 내용 처리를 위한 개인정보 수집에 동의합니다. <span style="color:var(--color-danger);">*</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding:1rem;">
+              📬 문의 보내기
+            </button>
+          </form>
+
+          <div id="form-success" style="display:none; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:var(--radius-lg); padding:1.5rem; margin-top:1.5rem; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:0.75rem;">✅</div>
+            <strong style="font-size:var(--text-base); color:#065f46;">문의가 접수되었습니다!</strong>
+            <p style="font-size:var(--text-sm); color:#059669; margin-top:0.5rem;">보통 1~3일 내에 이메일로 답변드립니다. 스팸함도 확인해주세요.</p>
+          </div>
+        </div>
+
+        <!-- 사이드 안내 -->
+        <div>
+          <div style="background:var(--color-bg-soft); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:1rem; color:var(--color-text);">💬 문의 전 확인하세요</h3>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.75rem;">
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary); display:flex; gap:0.5rem; align-items:flex-start;">
+                <span style="flex-shrink:0;">📚</span>
+                자주 묻는 질문은 각 글의 FAQ 섹션에서 먼저 확인해보세요.
+              </li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary); display:flex; gap:0.5rem; align-items:flex-start;">
+                <span style="flex-shrink:0;">⏱</span>
+                답변 시간: 평균 1~3일 (주말 제외)
+              </li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary); display:flex; gap:0.5rem; align-items:flex-start;">
+                <span style="flex-shrink:0;">🚫</span>
+                스팸, 무작위 홍보, 악의적인 문의에는 답변하지 않습니다.
+              </li>
+            </ul>
+          </div>
+
+          <div style="background:var(--color-bg-soft); border:1px solid var(--color-border); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem;">
+            <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:1rem; color:var(--color-text);">📋 자주 받는 문의</h3>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.75rem;">
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary);">✅ 글 내용 오류 제보</li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary);">✅ 특정 주제 글 요청</li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary);">✅ 글에 대한 추가 질문</li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary);">✅ 제휴 및 협업 제안</li>
+              <li style="font-size:var(--text-sm); color:var(--color-text-secondary);">✅ 피드백 및 의견 공유</li>
+            </ul>
+          </div>
+
+          <div style="background:linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); border-radius:var(--radius-lg); padding:1.5rem; color:white;">
+            <h3 style="font-size:var(--text-base); font-weight:700; margin-bottom:0.75rem;">📡 RSS로 구독하기</h3>
+            <p style="font-size:var(--text-sm); opacity:0.85; margin-bottom:1rem; line-height:1.6;">RSS 리더를 사용하신다면 피드를 구독해 새 글 소식을 받을 수 있습니다.</p>
+            <a href="/rss.xml" style="display:inline-flex; align-items:center; gap:0.5rem; font-size:var(--text-sm); font-weight:700; background:rgba(255,255,255,0.15); padding:0.5rem 1rem; border-radius:var(--radius-md); color:white; border:1px solid rgba(255,255,255,0.3);">RSS 피드 구독 →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-text">Log<span style="color:var(--color-primary)">it</span></span>
+          <p>실행하는 사람의 기록이 쌓이는 곳.</p>
+          <div class="footer-social"><a href="#" aria-label="트위터">✕</a><a href="/rss.xml" aria-label="RSS">📡</a></div>
+        </div>
+        <div class="footer-col">
+          <h4>카테고리</h4>
+          <ul class="footer-links">
+            <li><a href="/category.html?cat=ai">AI 활용</a></li>
+            <li><a href="/category.html?cat=automation">자동화</a></li>
+            <li><a href="/category.html?cat=productivity">생산성</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>사이트 정보</h4>
+          <ul class="footer-links">
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/contact.html">Contact</a></li>
+            <li><a href="/disclosure.html">운영 원칙</a></li>
+            <li><a href="/privacy.html">개인정보처리방침</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>인기 글</h4>
+          <ul class="footer-links">
+            <li><a href="post.html">ChatGPT 블로그 글쓰기</a></li>
+            <li><a href="post.html">Make.com vs n8n</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Logit. 모든 글의 저작권은 운영자에게 있습니다.</p>
+        <div class="footer-bottom-links">
+          <a href="/privacy.html">개인정보처리방침</a>
+          <a href="/disclosure.html">광고 고지</a>
+          <a href="/sitemap.xml">사이트맵</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="맨 위로">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 14V4M4 9l5-5 5 5"/></svg>
+  </button>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const type = document.getElementById('contact-type').value;
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+      const agreed = document.getElementById('privacy-agree').checked;
+
+      if (!type || !name || !email || !message || !agreed) {
+        alert('필수 항목을 모두 입력해주세요.');
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('올바른 이메일 주소를 입력해주세요.');
+        return;
+      }
+      // 실제 배포 시 FormSpree, Netlify Forms, EmailJS 등 연동
+      this.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    });
+  </script>
+</body>
+</html>

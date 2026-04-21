@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+  <channel>
+    <title>Logit — 실행하는 사람의 기록</title>
+    <link>https://logit.kr</link>
+    <description>AI 활용, 자동화, 생산성, 디지털 도구를 직접 써보고 정리합니다. 빠른 정보가 아닌 믿을 수 있는 정보를 추구하는 개인 블로그.</description>
+    <language>ko</language>
+    <managingEditor>hello@logit.kr (Logit 운영자)</managingEditor>
+    <webMaster>hello@logit.kr (Logit 운영자)</webMaster>
+    <lastBuildDate>Fri, 18 Apr 2025 09:00:00 +0900</lastBuildDate>
+    <atom:link href="https://logit.kr/rss.xml" rel="self" type="application/rss+xml"/>
+    <ttl>1440</ttl>
+
+    <image>
+      <url>https://logit.kr/favicon.svg</url>
+      <title>Logit</title>
+      <link>https://logit.kr</link>
+    </image>
+
+    <item>
+      <title>ChatGPT로 블로그 글 쓰기: 제대로 하는 방법과 절대 하면 안 되는 것들</title>
+      <link>https://logit.kr/post/chatgpt-blog-writing</link>
+      <guid isPermaLink="true">https://logit.kr/post/chatgpt-blog-writing</guid>
+      <pubDate>Fri, 18 Apr 2025 09:00:00 +0900</pubDate>
+      <dc:creator>Logit 운영자</dc:creator>
+      <category>AI 활용</category>
+      <description><![CDATA[AI 글쓰기 도구를 단순 복붙하면 오히려 역효과입니다. 6개월간 직접 운영하며 정리한 AI + 사람 협업 글쓰기 프레임워크를 공개합니다.]]></description>
+    </item>
+
+    <item>
+      <title>Make.com vs n8n: 무료로 쓸 수 있는 자동화 도구 실제 비교</title>
+      <link>https://logit.kr/post/make-vs-n8n-comparison</link>
+      <guid isPermaLink="true">https://logit.kr/post/make-vs-n8n-comparison</guid>
+      <pubDate>Tue, 15 Apr 2025 09:00:00 +0900</pubDate>
+      <dc:creator>Logit 운영자</dc:creator>
+      <category>자동화</category>
+      <description><![CDATA[두 도구를 3개월 이상 직접 써본 후기입니다. 어떤 상황에 뭘 써야 하는지 솔직하게 정리했습니다.]]></description>
+    </item>
+
+    <item>
+      <title>Notion 세컨드 브레인 6개월 사용 후기: 진짜 효과 있나?</title>
+      <link>https://logit.kr/post/notion-second-brain-review</link>
+      <guid isPermaLink="true">https://logit.kr/post/notion-second-brain-review</guid>
+      <pubDate>Sat, 12 Apr 2025 09:00:00 +0900</pubDate>
+      <dc:creator>Logit 운영자</dc:creator>
+      <category>생산성</category>
+      <description><![CDATA[화려한 템플릿보다 단순한 구조가 더 오래 지속됩니다. 실제 사용하며 살아남은 시스템을 공유합니다.]]></description>
+    </item>
+
+    <item>
+      <title>AdSense 승인받는 데 걸린 시간과 실제로 효과 있었던 것들</title>
+      <link>https://logit.kr/post/adsense-approval-guide</link>
+      <guid isPermaLink="true">https://logit.kr/post/adsense-approval-guide</guid>
+      <pubDate>Wed, 09 Apr 2025 09:00:00 +0900</pubDate>
+      <dc:creator>Logit 운영자</dc:creator>
+      <category>수익화 실험</category>
+      <description><![CDATA[광고 붙이기 전 준비해야 할 것들, 승인까지 걸린 시간, 그리고 첫 달 수익까지 솔직하게 공개합니다.]]></description>
+    </item>
+
+    <item>
+      <title>Google Search Console로 내 블로그 글 순위 올리는 방법</title>
+      <link>https://logit.kr/post/search-console-seo-guide</link>
+      <guid isPermaLink="true">https://logit.kr/post/search-console-seo-guide</guid>
+      <pubDate>Tue, 01 Apr 2025 09:00:00 +0900</pubDate>
+      <dc:creator>Logit 운영자</dc:creator>
+      <category>블로그 운영</category>
+      <description><![CDATA[데이터를 보는 방법부터 실제 글 개선까지, 직접 해보고 효과 있었던 방법만 정리했습니다.]]></description>
+    </item>
+
+  </channel>
+</rss>

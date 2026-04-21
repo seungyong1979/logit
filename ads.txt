@@ -1,0 +1,9 @@
+# Google AdSense ads.txt
+# Logit — https://logit.kr
+# 
+# 형식: <Ad System Domain>, <Publisher ID>, <Account Type>, <Certificate Authority ID>
+#
+# AdSense 승인 후 아래 줄의 ca-pub-XXXXXXXXXXXXXXXXX 부분을 실제 퍼블리셔 ID로 교체하세요.
+# Google AdSense 계정 > 계정 설정에서 확인 가능합니다.
+#
+google.com, pub-XXXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

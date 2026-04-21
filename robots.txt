@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://logit.kr/sitemap.xml
+
+# AdSense
+Allow: /ads.txt
+
+# 검색 결과, 404는 크롤링 허용하되 색인 불필요
+Disallow: /search.html?q=
