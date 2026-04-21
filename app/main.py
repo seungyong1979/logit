@@ -134,40 +134,6 @@ def _error_context(request: Request, status: int) -> dict:
     return ctx
 
 
-# ── 임시 관리자 초기화 (1회용) ──────────────────────────────────
-@app.get("/setup-admin-logit2026")
-async def setup_admin():
-    """관리자 계정 강제 생성 (1회 사용 후 코드에서 제거 예정)"""
-    import bcrypt as _bcrypt
-    from app.database import SessionLocal
-    from app.models import Admin
-    db = SessionLocal()
-    try:
-        # bcrypt 직접 사용 (72바이트 제한 우회)
-        password = settings.ADMIN_PASSWORD.encode("utf-8")[:72]
-        hashed = _bcrypt.hashpw(password, _bcrypt.gensalt()).decode("utf-8")
-
-        existing = db.query(Admin).filter(Admin.email == settings.ADMIN_EMAIL).first()
-        if existing:
-            existing.hashed_password = hashed
-            existing.is_active = True
-            db.commit()
-            return {"status": "updated", "email": settings.ADMIN_EMAIL}
-        admin = Admin(
-            email=settings.ADMIN_EMAIL,
-            hashed_password=hashed,
-            name="운영자",
-            is_active=True,
-        )
-        db.add(admin)
-        db.commit()
-        return {"status": "created", "email": settings.ADMIN_EMAIL}
-    except Exception as e:
-        db.rollback()
-        return {"status": "error", "message": str(e)}
-    finally:
-        db.close()
-
 
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
