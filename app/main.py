@@ -134,6 +134,37 @@ def _error_context(request: Request, status: int) -> dict:
     return ctx
 
 
+# ── 임시 관리자 초기화 (1회용) ──────────────────────────────────
+@app.get("/setup-admin-logit2026")
+async def setup_admin():
+    """관리자 계정 강제 생성 (1회 사용 후 코드에서 제거 예정)"""
+    from app.database import SessionLocal
+    from app.models import Admin
+    from app.auth import hash_password
+    db = SessionLocal()
+    try:
+        existing = db.query(Admin).filter(Admin.email == settings.ADMIN_EMAIL).first()
+        if existing:
+            existing.hashed_password = hash_password(settings.ADMIN_PASSWORD)
+            existing.is_active = True
+            db.commit()
+            return {"status": "updated", "email": settings.ADMIN_EMAIL}
+        admin = Admin(
+            email=settings.ADMIN_EMAIL,
+            hashed_password=hash_password(settings.ADMIN_PASSWORD),
+            name="운영자",
+            is_active=True,
+        )
+        db.add(admin)
+        db.commit()
+        return {"status": "created", "email": settings.ADMIN_EMAIL}
+    except Exception as e:
+        db.rollback()
+        return {"status": "error", "message": str(e)}
+    finally:
+        db.close()
+
+
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
     ctx = _error_context(request, 404)
