@@ -138,14 +138,14 @@ def _error_context(request: Request, status: int) -> dict:
 @app.get("/setup-admin-logit2026")
 async def setup_admin():
     """관리자 계정 강제 생성 (1회 사용 후 코드에서 제거 예정)"""
-    import bcrypt
+    import bcrypt as _bcrypt
     from app.database import SessionLocal
     from app.models import Admin
     db = SessionLocal()
     try:
         # bcrypt 직접 사용 (72바이트 제한 우회)
         password = settings.ADMIN_PASSWORD.encode("utf-8")[:72]
-        hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode("utf-8")
+        hashed = _bcrypt.hashpw(password, _bcrypt.gensalt()).decode("utf-8")
 
         existing = db.query(Admin).filter(Admin.email == settings.ADMIN_EMAIL).first()
         if existing:

@@ -12,20 +12,20 @@ from app.config import settings
 from app.database import get_db
 from app.models import Admin
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
+import bcrypt as _bcrypt_lib
 
 # ── 비밀번호 ────────────────────────────────────────────────
 def hash_password(password: str) -> str:
-    import bcrypt as _bcrypt
     pw = password.encode("utf-8")[:72]
-    return _bcrypt.hashpw(pw, _bcrypt.gensalt()).decode("utf-8")
+    return _bcrypt_lib.hashpw(pw, _bcrypt_lib.gensalt()).decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    import bcrypt as _bcrypt
     pw = plain.encode("utf-8")[:72]
-    return _bcrypt.checkpw(pw, hashed.encode("utf-8"))
+    try:
+        return _bcrypt_lib.checkpw(pw, hashed.encode("utf-8"))
+    except Exception:
+        return False
 
 
 # ── JWT ─────────────────────────────────────────────────────
