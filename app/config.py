@@ -52,6 +52,16 @@ class Settings:
     # GA
     GA_MEASUREMENT_ID: str = os.getenv("GA_MEASUREMENT_ID", "")
 
+    # Cloudinary (이미지 저장)
+    CLOUDINARY_CLOUD_NAME: str = os.getenv("CLOUDINARY_CLOUD_NAME", "")
+    CLOUDINARY_API_KEY: str = os.getenv("CLOUDINARY_API_KEY", "")
+    CLOUDINARY_API_SECRET: str = os.getenv("CLOUDINARY_API_SECRET", "")
+
+    # AI 이미지 생성
+    AI_IMAGE_ENABLED: bool = os.getenv("AI_IMAGE_ENABLED", "true").lower() == "true"
+    AI_IMAGE_MODEL: str = os.getenv("AI_IMAGE_MODEL", "dall-e-3")
+    AI_IMAGE_SIZE: str = os.getenv("AI_IMAGE_SIZE", "1792x1024")
+
 
 @lru_cache()
 def get_settings() -> Settings:

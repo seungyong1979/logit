@@ -355,6 +355,20 @@ async def generate_ai_draft(db: Session, category=None, category_slug: Optional[
             tags.append(tag)
         db.flush()
 
+        # ── AI 대표 이미지 생성 ──────────────────────────────
+        og_image_url = None
+        try:
+            from app.image_generator import generate_post_image
+            og_image_url = await generate_post_image(
+                title=parsed["title"],
+                category_name=category_name,
+                post_slug=slug,
+            )
+            if og_image_url:
+                logger.info(f"[AI] 대표 이미지 생성 완료: {og_image_url}")
+        except Exception as img_err:
+            logger.warning(f"[AI] 이미지 생성 실패 (글은 저장됩니다): {img_err}")
+
         # 글 저장
         post = Post(
             title=parsed["title"],
@@ -364,6 +378,7 @@ async def generate_ai_draft(db: Session, category=None, category_slug: Optional[
             content_markdown=parsed["content_markdown"],
             meta_title=parsed["title"],
             meta_description=parsed["meta_description"] or parsed["excerpt"],
+            og_image=og_image_url or "",
             category_id=category.id if category else None,
             status=PostStatus.DRAFT,
             is_ai_draft=True,
@@ -382,7 +397,7 @@ async def generate_ai_draft(db: Session, category=None, category_slug: Optional[
         db.commit()
         db.refresh(post)
 
-        logger.info(f"[AI] 글 초안 생성 완료: '{post.title}' (토큰: {tokens_used})")
+        logger.info(f"[AI] 글 초안 생성 완료: '{post.title}' (토큰: {tokens_used}, 이미지: {'있음' if og_image_url else '없음'})")
         return post
 
     except Exception as e:
