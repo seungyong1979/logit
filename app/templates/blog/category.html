@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} — 카테고리 | {{ site_name }}{% endblock %}
+{% block meta_description %}{{ category.description }}{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  {# 카테고리 헤더 #}
+  <div class="category-page-header">
+    <span class="category-page-icon">{{ category.icon }}</span>
+    <div>
+      <h1 class="category-page-title">{{ category.name }}</h1>
+      <p class="category-page-desc">{{ category.description }}</p>
+    </div>
+  </div>
+
+  <div class="page-layout">
+    <div class="page-main">
+      {% if posts %}
+      <div class="post-grid">
+        {% for post in posts %}
+        <article class="post-card">
+          {% if post.og_image %}
+          <a href="/post/{{ post.slug }}" class="post-card-img-link">
+            <img src="{{ post.og_image }}" alt="{{ post.title }}" class="post-card-img" loading="lazy">
+          </a>
+          {% endif %}
+          <div class="post-card-body">
+            <h3 class="post-card-title">
+              <a href="/post/{{ post.slug }}">{{ post.title }}</a>
+            </h3>
+            <p class="post-card-excerpt">{{ post.excerpt | truncate(100) }}</p>
+            <div class="post-meta">
+              <span class="post-date">{{ format_date_ko(post.published_at) }}</span>
+              <span class="post-read-time">{{ post.read_time_min }}분</span>
+              <span class="post-views">👁 {{ post.view_count }}</span>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      {# 페이지네이션 #}
+      {% if pagination.total_pages > 1 %}
+      <nav class="pagination" aria-label="페이지 이동">
+        {% if pagination.has_prev %}
+        <a href="/category/{{ category.slug }}?page={{ current_page - 1 }}" class="pagination-btn">← 이전</a>
+        {% endif %}
+        {% for p in range(1, pagination.total_pages + 1) %}
+        <a href="/category/{{ category.slug }}?page={{ p }}"
+           class="pagination-btn {% if p == current_page %}active{% endif %}">{{ p }}</a>
+        {% endfor %}
+        {% if pagination.has_next %}
+        <a href="/category/{{ category.slug }}?page={{ current_page + 1 }}" class="pagination-btn">다음 →</a>
+        {% endif %}
+      </nav>
+      {% endif %}
+
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h2>아직 발행된 글이 없습니다</h2>
+        <p>이 카테고리에는 아직 글이 없습니다. 곧 새로운 글이 올라올 예정입니다!</p>
+        <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+      </div>
+      {% endif %}
+    </div>
+
+    {# 사이드바 #}
+    <aside class="page-sidebar">
+      <div class="sidebar-box">
+        <h3 class="sidebar-box-title">다른 카테고리</h3>
+        <ul class="sidebar-cat-list">
+          {% for cat in sidebar_categories %}
+          <li>
+            <a href="/category/{{ cat.slug }}" class="{% if cat.id == category.id %}active{% endif %}">
+              {{ cat.icon }} {{ cat.name }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      {% if popular_posts %}
+      <div class="sidebar-box">
+        <h3 class="sidebar-box-title">인기 글</h3>
+        <ul class="sidebar-post-list">
+          {% for post in popular_posts %}
+          <li><a href="/post/{{ post.slug }}">{{ post.title | truncate(35) }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      {% if adsense_client and adsense_slot_sidebar %}
+      <div class="ad-slot-sidebar">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="{{ adsense_client }}"
+             data-ad-slot="{{ adsense_slot_sidebar }}"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+      {% else %}
+      <div class="ad-slot ad-placeholder"><span class="ad-placeholder-label">사이드바 광고</span></div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>{% set meta_robots = "noindex, follow" %}{% set page_title = "페이지를 찾을 수 없습니다 (404) | " + site_name %}{% include 'partials/head.html' %}</head>
+<body>
+{% include 'partials/header.html' %}
+<main id="main-content">
+  <div style="min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:4rem 1rem;">
+    <div>
+      <div class="error-code" style="font-size:8rem;font-weight:900;color:var(--color-border);line-height:1;margin-bottom:1rem;">404</div>
+      <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:0.75rem;">페이지를 찾을 수 없습니다</h1>
+      <p style="color:var(--color-text-secondary);margin-bottom:2rem;">요청하신 페이지가 이동되었거나 삭제되었습니다.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="/" class="btn-primary">홈으로 가기</a>
+        <a href="/category" style="padding:0.75rem 1.5rem;border:1px solid var(--color-border);border-radius:var(--radius-md);font-weight:600;color:var(--color-text);font-size:0.9rem;">전체 글 보기</a>
+      </div>
+    </div>
+  </div>
+</main>
+{% include 'partials/footer.html' %}
+</body>
+</html>

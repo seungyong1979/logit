@@ -1,0 +1,118 @@
+{% extends "admin/base.html" %}
+{% block title %}글 관리{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1 class="admin-page-title">글 관리</h1>
+  <a href="/admin/posts/new" class="btn btn-primary">✏️ 새 글 작성</a>
+</div>
+
+{# 필터 #}
+<div class="filter-bar">
+  <form method="get" action="/admin/posts" class="filter-form">
+    <input type="text" name="q" value="{{ search_query }}" class="form-input form-input-sm"
+           placeholder="제목 검색...">
+    <select name="status" class="form-select form-select-sm">
+      <option value="all" {% if status_filter == 'all' %}selected{% endif %}>전체 상태</option>
+      <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>초안</option>
+      <option value="review" {% if status_filter == 'review' %}selected{% endif %}>검수 중</option>
+      <option value="published" {% if status_filter == 'published' %}selected{% endif %}>발행됨</option>
+      <option value="archived" {% if status_filter == 'archived' %}selected{% endif %}>보관됨</option>
+    </select>
+    <select name="category" class="form-select form-select-sm">
+      <option value="0" {% if category_filter == 0 %}selected{% endif %}>전체 카테고리</option>
+      {% for cat in categories %}
+      <option value="{{ cat.id }}" {% if category_filter == cat.id %}selected{% endif %}>{{ cat.icon }} {{ cat.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-outline btn-sm">🔍 필터</button>
+    <a href="/admin/posts" class="btn btn-ghost btn-sm">초기화</a>
+  </form>
+</div>
+
+{# 글 목록 테이블 #}
+{% if posts %}
+<div class="table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>제목</th>
+        <th>카테고리</th>
+        <th>상태</th>
+        <th>조회수</th>
+        <th>날짜</th>
+        <th>액션</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+      <tr>
+        <td class="post-title-cell">
+          <a href="/admin/posts/{{ post.id }}/edit">{{ post.title }}</a>
+          {% if post.is_ai_draft %}<span class="badge badge-ai-sm">AI</span>{% endif %}
+          {% if post.is_featured %}<span class="badge badge-featured-sm">⭐</span>{% endif %}
+        </td>
+        <td>
+          {% if post.category %}
+          <span class="cat-chip">{{ post.category.icon }} {{ post.category.name }}</span>
+          {% else %}
+          <span class="text-muted">—</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if post.status.value == 'published' %}
+          <span class="badge badge-success">발행됨</span>
+          {% elif post.status.value == 'draft' %}
+          <span class="badge badge-warning">초안</span>
+          {% elif post.status.value == 'review' %}
+          <span class="badge badge-info">검수중</span>
+          {% else %}
+          <span class="badge badge-gray">보관됨</span>
+          {% endif %}
+        </td>
+        <td>{{ post.view_count }}</td>
+        <td>{{ format_date_ko(post.published_at or post.created_at) }}</td>
+        <td class="action-cell">
+          <a href="/admin/posts/{{ post.id }}/edit" class="btn btn-xs btn-outline">수정</a>
+          {% if post.status.value != 'published' %}
+          <form method="post" action="/admin/posts/{{ post.id }}/publish" style="display:inline">
+            <button class="btn btn-xs btn-success">발행</button>
+          </form>
+          {% else %}
+          <a href="/post/{{ post.slug }}" target="_blank" class="btn btn-xs btn-ghost">보기</a>
+          {% endif %}
+          <form method="post" action="/admin/posts/{{ post.id }}/delete" style="display:inline"
+                onsubmit="return confirm('정말 삭제하시겠습니까?')">
+            <button class="btn btn-xs btn-danger">삭제</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{# 페이지네이션 #}
+{% if pagination.total_pages > 1 %}
+<nav class="pagination" aria-label="페이지 이동">
+  {% if pagination.has_prev %}
+  <a href="?page={{ current_page - 1 }}&status={{ status_filter }}&category={{ category_filter }}&q={{ search_query }}" class="pagination-btn">← 이전</a>
+  {% endif %}
+  {% for p in range(1, pagination.total_pages + 1) %}
+  <a href="?page={{ p }}&status={{ status_filter }}&category={{ category_filter }}&q={{ search_query }}"
+     class="pagination-btn {% if p == current_page %}active{% endif %}">{{ p }}</a>
+  {% endfor %}
+  {% if pagination.has_next %}
+  <a href="?page={{ current_page + 1 }}&status={{ status_filter }}&category={{ category_filter }}&q={{ search_query }}" class="pagination-btn">다음 →</a>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">📭</div>
+  <p>조건에 맞는 글이 없습니다.</p>
+  <a href="/admin/posts/new" class="btn btn-primary">새 글 작성하기</a>
+</div>
+{% endif %}
+{% endblock %}

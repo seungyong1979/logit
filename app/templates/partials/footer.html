@@ -1,0 +1,50 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">Logit</a>
+      <p class="footer-tagline">실행하는 사람의 기록이 쌓이는 곳</p>
+      <p class="footer-desc">AI, 자동화, 생산성 도구를 직접 써보고 검증한 실용 정보 블로그입니다.</p>
+    </div>
+
+    <div class="footer-nav">
+      <div class="footer-col">
+        <h3 class="footer-col-title">카테고리</h3>
+        <ul>
+          {% for cat in sidebar_categories %}
+          <li><a href="/category/{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-col-title">사이트 정보</h3>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">문의하기</a></li>
+          <li><a href="/disclosure">운영 원칙 & 광고 고지</a></li>
+          <li><a href="/privacy">개인정보처리방침</a></li>
+          <li><a href="/rss.xml">RSS 피드</a></li>
+          <li><a href="/sitemap.xml">사이트맵</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-col-title">인기 글</h3>
+        <ul>
+          {% for post in popular_posts[:5] %}
+          <li><a href="/post/{{ post.slug }}">{{ post.title | truncate(40) }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>&copy; {{ current_year }} Logit. 모든 글의 저작권은 운영자에게 있습니다.</p>
+      <nav class="footer-bottom-links">
+        <a href="/privacy">개인정보처리방침</a>
+        <a href="/disclosure">광고 고지</a>
+        <a href="/sitemap.xml">사이트맵</a>
+      </nav>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}카테고리 | {{ site_name }}{% endblock %}
+{% block meta_description %}Logit의 모든 카테고리를 확인하세요. AI, 자동화, 생산성, 디지털 도구 등 다양한 주제를 다룹니다.{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-hero">
+    <h1 class="page-hero-title">카테고리</h1>
+    <p class="page-hero-desc">주제별로 글을 모아두었습니다.</p>
+  </div>
+
+  <div class="category-grid-lg">
+    {% for cat in categories %}
+    <a href="/category/{{ cat.slug }}" class="category-card-lg">
+      <span class="category-card-icon">{{ cat.icon }}</span>
+      <div class="category-card-info">
+        <h2 class="category-card-name">{{ cat.name }}</h2>
+        <p class="category-card-desc">{{ cat.description }}</p>
+        <span class="category-card-count">{{ cat._post_count or 0 }}개의 글</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site_name }} — 실행하는 사람의 기록{% endblock %}
+{% block meta_description %}AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그. 검증된 정보만 전달합니다.{% endblock %}
+
+{% block content %}
+
+{# ── 히어로 섹션 ─────────────────────────────────────────── #}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="hero-badge">✦ 직접 써보고 정리한 실용 정보</span>
+      <h1 class="hero-title">실행하는 사람의<br>기록이 쌓이는 곳</h1>
+      <p class="hero-desc">AI 도구, 자동화 시스템, 생산성 앱을 직접 사용해보고<br>솔직하게 정리한 경험 중심 블로그입니다.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <strong>{{ total_posts }}+</strong>
+          <span>발행 글</span>
+        </div>
+        <div class="hero-stat">
+          <strong>{{ sidebar_categories | length }}</strong>
+          <span>카테고리</span>
+        </div>
+        <div class="hero-stat">
+          <strong>매일</strong>
+          <span>새 글 발행</span>
+        </div>
+      </div>
+    </div>
+
+    {% if featured_post %}
+    <div class="hero-featured">
+      <div class="featured-card">
+        <span class="badge badge-primary">FEATURED</span>
+        {% if featured_post.category %}
+        <a href="/category/{{ featured_post.category.slug }}" class="post-category-link">
+          {{ featured_post.category.icon }} {{ featured_post.category.name }}
+        </a>
+        {% endif %}
+        <h2 class="featured-title">
+          <a href="/post/{{ featured_post.slug }}">{{ featured_post.title }}</a>
+        </h2>
+        <p class="featured-excerpt">{{ featured_post.excerpt | truncate(120) }}</p>
+        <div class="post-meta">
+          <span class="post-date">{{ featured_post.published_at.strftime('%Y년 %m월 %d일') if featured_post.published_at else '' }}</span>
+          <span class="post-read-time">{{ featured_post.read_time_min }}분 읽기</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{# ── 최신 글 ─────────────────────────────────────────────── #}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">최신 글</h2>
+        <p class="section-sub">최근에 작성한 글들입니다</p>
+      </div>
+      <a href="/categories" class="btn btn-outline">전체 보기 →</a>
+    </div>
+
+    {% if latest_posts %}
+    <div class="post-grid">
+      {% for post in latest_posts %}
+      <article class="post-card">
+        {% if post.og_image %}
+        <a href="/post/{{ post.slug }}" class="post-card-img-link">
+          <img src="{{ post.og_image }}" alt="{{ post.title }}" class="post-card-img" loading="lazy">
+        </a>
+        {% endif %}
+        <div class="post-card-body">
+          {% if post.category %}
+          <a href="/category/{{ post.category.slug }}" class="post-category-link">
+            {{ post.category.icon }} {{ post.category.name }}
+          </a>
+          {% endif %}
+          <h3 class="post-card-title">
+            <a href="/post/{{ post.slug }}">{{ post.title }}</a>
+          </h3>
+          <p class="post-card-excerpt">{{ post.excerpt | truncate(100) }}</p>
+          <div class="post-meta">
+            <span class="post-date">{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else '' }}</span>
+            <span class="post-read-time">{{ post.read_time_min }}분</span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <p>아직 발행된 글이 없습니다. 곧 첫 글이 올라올 예정입니다!</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{# ── 광고 슬롯 (상단) ─────────────────────────────────────── #}
+{% if adsense_client and adsense_slot_top %}
+<div class="container ad-section">
+  <div class="ad-slot" data-slot="top">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="{{ adsense_client }}"
+         data-ad-slot="{{ adsense_slot_top }}"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</div>
+{% else %}
+<div class="container">
+  <div class="ad-slot ad-placeholder">
+    <span class="ad-placeholder-label">광고 영역</span>
+  </div>
+</div>
+{% endif %}
+
+{# ── 인기 글 ─────────────────────────────────────────────── #}
+{% if popular_posts %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🔥 인기 글</h2>
+    </div>
+    <div class="popular-list">
+      {% for post in popular_posts %}
+      <article class="popular-item">
+        <span class="popular-rank">{{ loop.index }}</span>
+        <div class="popular-body">
+          {% if post.category %}
+          <a href="/category/{{ post.category.slug }}" class="post-category-link">{{ post.category.icon }} {{ post.category.name }}</a>
+          {% endif %}
+          <h3 class="popular-title">
+            <a href="/post/{{ post.slug }}">{{ post.title }}</a>
+          </h3>
+          <div class="post-meta">
+            <span class="post-date">{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else '' }}</span>
+            <span class="post-views">👁 {{ post.view_count }}</span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ── 카테고리 목록 ─────────────────────────────────────────── #}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">카테고리</h2>
+    </div>
+    <div class="category-grid">
+      {% for cat in sidebar_categories %}
+      <a href="/category/{{ cat.slug }}" class="category-card">
+        <span class="category-icon">{{ cat.icon }}</span>
+        <div class="category-info">
+          <h3 class="category-name">{{ cat.name }}</h3>
+          <p class="category-desc">{{ cat.description | truncate(40) }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ── 운영자 소개 스트립 ────────────────────────────────────── #}
+<section class="editor-strip">
+  <div class="container editor-strip-inner">
+    <div class="editor-icon">✍️</div>
+    <div class="editor-text">
+      <h2>직접 써보고, 정리하고, 공유합니다</h2>
+      <p>Logit은 1인 운영 블로그입니다. 모든 글은 실제 사용 경험을 바탕으로 작성됩니다.<br>
+         광고나 협찬 목적의 과장된 표현 없이, 솔직한 정보만 전달합니다.</p>
+      <a href="/about" class="btn btn-primary">운영자 소개 보기 →</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

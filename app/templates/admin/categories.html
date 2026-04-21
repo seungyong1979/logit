@@ -1,0 +1,72 @@
+{% extends "admin/base.html" %}
+{% block title %}카테고리 관리{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1 class="admin-page-title">카테고리 관리</h1>
+</div>
+
+<div class="categories-layout">
+  {# 카테고리 목록 #}
+  <div class="categories-list-panel">
+    <h2 class="panel-title">카테고리 목록</h2>
+    {% if categories %}
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr><th>아이콘</th><th>이름</th><th>슬러그</th><th>글 수</th><th>순서</th><th>액션</th></tr>
+        </thead>
+        <tbody>
+          {% for cat in categories %}
+          <tr>
+            <td>{{ cat.icon }}</td>
+            <td>{{ cat.name }}</td>
+            <td><code>{{ cat.slug }}</code></td>
+            <td>{{ cat._post_count }}</td>
+            <td>{{ cat.order }}</td>
+            <td>
+              <a href="/category/{{ cat.slug }}" target="_blank" class="btn btn-xs btn-ghost">보기</a>
+              <form method="post" action="/admin/categories/{{ cat.id }}/delete" style="display:inline"
+                    onsubmit="return confirm('카테고리를 삭제하시겠습니까? 연결된 글의 카테고리가 초기화됩니다.')">
+                <button class="btn btn-xs btn-danger">삭제</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state"><p>카테고리가 없습니다.</p></div>
+    {% endif %}
+  </div>
+
+  {# 새 카테고리 추가 #}
+  <div class="add-category-panel">
+    <h2 class="panel-title">새 카테고리 추가</h2>
+    <form method="post" action="/admin/categories/new" class="add-category-form">
+      <div class="form-group">
+        <label class="form-label">아이콘 (이모지)</label>
+        <input type="text" name="icon" class="form-input" value="📝" maxlength="4" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">이름 <span class="required">*</span></label>
+        <input type="text" name="name" class="form-input" required placeholder="카테고리 이름">
+      </div>
+      <div class="form-group">
+        <label class="form-label">슬러그 (URL)</label>
+        <input type="text" name="slug" class="form-input" placeholder="자동 생성 (비워두면 자동)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">설명</label>
+        <input type="text" name="description" class="form-input" placeholder="카테고리 설명">
+      </div>
+      <div class="form-group">
+        <label class="form-label">정렬 순서</label>
+        <input type="number" name="order" class="form-input" value="0">
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">추가</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

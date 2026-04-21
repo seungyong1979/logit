@@ -1,0 +1,40 @@
+{% extends "admin/base.html" %}
+{% block title %}설정{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1 class="admin-page-title">⚙️ 설정</h1>
+</div>
+
+<div class="settings-grid">
+  <div class="settings-panel">
+    <h2 class="panel-title">현재 환경 설정</h2>
+    <p class="settings-note">⚠️ 설정을 변경하려면 <code>.env</code> 파일 또는 Render 환경변수를 수정하세요.</p>
+    <table class="admin-table settings-table">
+      <thead><tr><th>변수</th><th>값</th></tr></thead>
+      <tbody>
+        <tr><td>APP_NAME</td><td>{{ settings.APP_NAME }}</td></tr>
+        <tr><td>BASE_URL</td><td>{{ settings.BASE_URL }}</td></tr>
+        <tr><td>APP_ENV</td><td>{{ settings.APP_ENV }}</td></tr>
+        <tr><td>ADMIN_EMAIL</td><td>{{ settings.ADMIN_EMAIL }}</td></tr>
+        <tr><td>AI_MODEL</td><td>{{ settings.AI_MODEL }}</td></tr>
+        <tr><td>OPENAI_API_KEY</td><td>{{ '✅ 설정됨' if settings.OPENAI_API_KEY else '❌ 미설정' }}</td></tr>
+        <tr><td>ADSENSE_CLIENT_ID</td><td>{{ settings.ADSENSE_CLIENT_ID or '미설정' }}</td></tr>
+        <tr><td>GA_MEASUREMENT_ID</td><td>{{ settings.GA_MEASUREMENT_ID or '미설정' }}</td></tr>
+        <tr><td>AI 초안 생성 시간</td><td>매일 {{ settings.AI_DRAFT_SCHEDULE_HOUR }}시 {{ settings.AI_DRAFT_SCHEDULE_MINUTE }}분 (KST)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="settings-panel">
+    <h2 class="panel-title">빠른 링크</h2>
+    <ul class="quick-links">
+      <li><a href="/" target="_blank">🌐 블로그 홈</a></li>
+      <li><a href="/rss.xml" target="_blank">📡 RSS 피드</a></li>
+      <li><a href="/sitemap.xml" target="_blank">🗺️ 사이트맵</a></li>
+      <li><a href="/robots.txt" target="_blank">🤖 robots.txt</a></li>
+      <li><a href="/ads.txt" target="_blank">📄 ads.txt</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

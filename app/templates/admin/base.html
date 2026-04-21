@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}관리자{% endblock %} | {{ site_name }}</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/admin.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+
+    {# 사이드바 #}
+    <nav class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <a href="/admin/dashboard" class="admin-logo">
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="6" fill="#2563eb"/>
+            <path d="M7 8h8M7 12h10M7 16h6M7 20h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="21" cy="19" r="4" fill="#60a5fa"/>
+          </svg>
+          <span>Logit 관리</span>
+        </a>
+      </div>
+
+      <ul class="admin-nav">
+        <li>
+          <a href="/admin/dashboard" class="admin-nav-link {% if request.url.path == '/admin/dashboard' %}active{% endif %}">
+            <span class="nav-icon">📊</span> 대시보드
+          </a>
+        </li>
+        <li>
+          <a href="/admin/posts" class="admin-nav-link {% if '/admin/posts' in request.url.path %}active{% endif %}">
+            <span class="nav-icon">📝</span> 글 관리
+          </a>
+        </li>
+        <li>
+          <a href="/admin/posts/new" class="admin-nav-link {% if request.url.path == '/admin/posts/new' %}active{% endif %}">
+            <span class="nav-icon">✏️</span> 새 글 작성
+          </a>
+        </li>
+        <li>
+          <a href="/admin/categories" class="admin-nav-link {% if '/admin/categories' in request.url.path %}active{% endif %}">
+            <span class="nav-icon">🗂️</span> 카테고리
+          </a>
+        </li>
+        <li>
+          <a href="/admin/ai/logs" class="admin-nav-link {% if '/admin/ai' in request.url.path %}active{% endif %}">
+            <span class="nav-icon">🤖</span> AI 로그
+          </a>
+        </li>
+        <li>
+          <a href="/admin/settings" class="admin-nav-link {% if '/admin/settings' in request.url.path %}active{% endif %}">
+            <span class="nav-icon">⚙️</span> 설정
+          </a>
+        </li>
+      </ul>
+
+      <div class="admin-sidebar-footer">
+        <a href="/" target="_blank" class="admin-nav-link">
+          <span class="nav-icon">🌐</span> 블로그 보기
+        </a>
+        <a href="/admin/logout" class="admin-nav-link logout-link">
+          <span class="nav-icon">🚪</span> 로그아웃
+        </a>
+      </div>
+    </nav>
+
+    {# 메인 콘텐츠 #}
+    <div class="admin-main">
+      <header class="admin-topbar">
+        <button class="admin-menu-toggle" id="admin-menu-toggle" aria-label="메뉴 토글">☰</button>
+        <div class="admin-topbar-right">
+          <span class="admin-user">👤 {{ admin.name }}</span>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

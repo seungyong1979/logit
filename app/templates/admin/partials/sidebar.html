@@ -1,0 +1,33 @@
+<aside class="admin-sidebar">
+  <div class="admin-logo">
+    <a href="/admin/dashboard">
+      <span class="logo-text">Log<span>it</span></span>
+      <span class="admin-label">Admin</span>
+    </a>
+  </div>
+  <nav class="admin-nav">
+    <a href="/admin/dashboard" class="admin-nav-item {% if request.url.path == '/admin/dashboard' %}active{% endif %}">
+      <span>📊</span> 대시보드
+    </a>
+    <div class="admin-nav-section">콘텐츠</div>
+    <a href="/admin/posts/new" class="admin-nav-item {% if '/new' in request.url.path %}active{% endif %}">
+      <span>✏️</span> 새 글 작성
+    </a>
+    <a href="/admin/posts" class="admin-nav-item {% if request.url.path == '/admin/posts' %}active{% endif %}">
+      <span>📝</span> 글 목록
+    </a>
+    <a href="/admin/posts?status=draft" class="admin-nav-item">
+      <span>🤖</span> AI 초안
+    </a>
+    <a href="/admin/categories" class="admin-nav-item {% if '/categories' in request.url.path %}active{% endif %}">
+      <span>📂</span> 카테고리
+    </a>
+    <div class="admin-nav-section">사이트</div>
+    <a href="/" target="_blank" class="admin-nav-item">
+      <span>🌐</span> 블로그 보기
+    </a>
+    <a href="/admin/logout" class="admin-nav-item admin-nav-logout">
+      <span>🚪</span> 로그아웃
+    </a>
+  </nav>
+</aside>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ page_title | default(site_name) }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}{% endblock %}">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Logit 운영자">
+
+  {# Open Graph #}
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:site_name" content="{{ site_name }}">
+  <meta property="og:title" content="{% block og_title %}{{ page_title | default(site_name) }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ base_url }}/static/images/og-default.png{% endblock %}">
+  <meta property="og:url" content="{% block og_url %}{{ canonical_url | default(base_url) }}{% endblock %}">
+  <meta property="og:locale" content="ko_KR">
+
+  {# Twitter Card #}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | default(site_name) }}">
+  <meta name="twitter:description" content="{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}">
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png">
+
+  {# Canonical & RSS #}
+  {% if canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {% endif %}
+  <link rel="alternate" type="application/rss+xml" title="{{ site_name }} RSS" href="{{ base_url }}/rss.xml">
+
+  {# Favicon #}
+  <link rel="icon" href="/static/images/favicon.svg" type="image/svg+xml">
+
+  {# Fonts #}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+  {# CSS #}
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  {# Google Analytics (활성화 후 ID 입력) #}
+  {% if ga_id %}
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ ga_id }}');
+  </script>
+  {% endif %}
+
+  {# AdSense (퍼블리셔 ID 입력 후 주석 해제) #}
+  {% if adsense_client %}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client }}" crossorigin="anonymous"></script>
+  {% endif %}
+
+  {% block extra_head %}{% endblock %}
+
+  {# JSON-LD 구조화 데이터 #}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ site_name }}",
+    "url": "{{ base_url }}",
+    "description": "AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그",
+    "inLanguage": "ko",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ base_url }}/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-to-main">본문 바로가기</a>
+
+  {# 읽기 진행 바 #}
+  <div id="reading-progress" class="reading-progress" aria-hidden="true"></div>
+
+  {# 헤더 #}
+  {% include "partials/header.html" %}
+
+  {# 메인 콘텐츠 #}
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  {# 푸터 #}
+  {% include "partials/footer.html" %}
+
+  {# Back to top #}
+  <button id="back-to-top" class="back-to-top" aria-label="맨 위로">↑</button>
+
+  {# 검색 오버레이 #}
+  <div id="search-overlay" class="search-overlay" role="dialog" aria-label="검색" aria-hidden="true">
+    <div class="search-overlay-inner">
+      <button id="search-close" class="search-close" aria-label="검색 닫기">✕</button>
+      <form action="/search" method="get" class="search-overlay-form">
+        <input type="text" name="q" id="search-overlay-input" class="search-overlay-input"
+               placeholder="검색어를 입력하세요..." autocomplete="off" aria-label="검색어">
+        <button type="submit" class="search-overlay-btn">검색</button>
+      </form>
+      <div id="search-overlay-results" class="search-overlay-results"></div>
+    </div>
+  </div>
+
+  {# 모바일 메뉴 #}
+  <div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+    <div class="mobile-nav-inner">
+      <div class="mobile-nav-header">
+        <span class="mobile-nav-logo">{{ site_name }}</span>
+        <button id="mobile-nav-close" class="mobile-nav-close" aria-label="메뉴 닫기">✕</button>
+      </div>
+      <nav class="mobile-nav-links">
+        {% for cat in sidebar_categories %}
+        <a href="/category/{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</a>
+        {% endfor %}
+        <a href="/about">👤 About</a>
+        <a href="/contact">✉️ 문의</a>
+      </nav>
+    </div>
+  </div>
+  <div id="mobile-overlay" class="mobile-overlay"></div>
+
+  <script src="/static/js/main.js"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

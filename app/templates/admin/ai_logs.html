@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block title %}AI 생성 로그{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <h1 class="admin-page-title">🤖 AI 생성 로그</h1>
+  <form method="post" action="/admin/ai/generate">
+    <button type="submit" class="btn btn-ai">🤖 지금 생성</button>
+  </form>
+</div>
+
+{% if logs %}
+<div class="table-wrap">
+  <table class="admin-table">
+    <thead>
+      <tr><th>상태</th><th>카테고리</th><th>모델</th><th>토큰</th><th>날짜</th><th>오류</th></tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr class="{% if log.status == 'failed' %}row-error{% endif %}">
+        <td>{{ '✅' if log.status == 'success' else '❌' }}</td>
+        <td>{{ log.category or '—' }}</td>
+        <td>{{ log.model or '—' }}</td>
+        <td>{{ log.tokens_used }}</td>
+        <td>{{ format_date_ko(log.created_at) }}</td>
+        <td class="error-cell">{{ log.error_msg[:80] if log.error_msg else '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">🤖</div>
+  <p>아직 AI 생성 로그가 없습니다.</p>
+</div>
+{% endif %}
+{% endblock %}

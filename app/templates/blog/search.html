@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{% if query %}'{{ query }}' 검색 결과{% else %}검색{% endif %} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="search-page-header">
+    <h1 class="page-hero-title">검색</h1>
+    <form action="/search" method="get" class="search-page-form">
+      <div class="search-input-wrap">
+        <input type="text" name="q" value="{{ query }}" class="search-page-input"
+               placeholder="검색어를 입력하세요..." aria-label="검색어">
+        <button type="submit" class="search-page-btn">🔍 검색</button>
+      </div>
+    </form>
+  </div>
+
+  {% if query %}
+  <p class="search-info">
+    '<strong>{{ query }}</strong>' 검색 결과: <strong>{{ total }}</strong>개
+  </p>
+  {% endif %}
+
+  {% if posts %}
+  <div class="post-grid">
+    {% for post in posts %}
+    <article class="post-card">
+      <div class="post-card-body">
+        {% if post.category %}
+        <a href="/category/{{ post.category.slug }}" class="post-category-link">{{ post.category.icon }} {{ post.category.name }}</a>
+        {% endif %}
+        <h3 class="post-card-title"><a href="/post/{{ post.slug }}">{{ post.title }}</a></h3>
+        <p class="post-card-excerpt">{{ post.excerpt | truncate(100) }}</p>
+        <div class="post-meta">
+          <span class="post-date">{{ format_date_ko(post.published_at) }}</span>
+          <span class="post-read-time">{{ post.read_time_min }}분</span>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {% if pagination.total_pages > 1 %}
+  <nav class="pagination" aria-label="페이지 이동">
+    {% if pagination.has_prev %}
+    <a href="/search?q={{ query }}&page={{ current_page - 1 }}" class="pagination-btn">← 이전</a>
+    {% endif %}
+    {% for p in range(1, pagination.total_pages + 1) %}
+    <a href="/search?q={{ query }}&page={{ p }}"
+       class="pagination-btn {% if p == current_page %}active{% endif %}">{{ p }}</a>
+    {% endfor %}
+    {% if pagination.has_next %}
+    <a href="/search?q={{ query }}&page={{ current_page + 1 }}" class="pagination-btn">다음 →</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+
+  {% elif query %}
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <h2>검색 결과가 없습니다</h2>
+    <p>'{{ query }}'에 대한 검색 결과를 찾을 수 없습니다.</p>
+    <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+  </div>
+
+  {% else %}
+  <div class="search-default">
+    <h2 class="section-title">많이 읽은 글</h2>
+    <div class="popular-list">
+      {% for post in popular_posts %}
+      <article class="popular-item">
+        <span class="popular-rank">{{ loop.index }}</span>
+        <div class="popular-body">
+          {% if post.category %}
+          <a href="/category/{{ post.category.slug }}" class="post-category-link">{{ post.category.icon }} {{ post.category.name }}</a>
+          {% endif %}
+          <h3 class="popular-title"><a href="/post/{{ post.slug }}">{{ post.title }}</a></h3>
+          <div class="post-meta">
+            <span class="post-date">{{ format_date_ko(post.published_at) }}</span>
+            <span class="post-views">👁 {{ post.view_count }}</span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

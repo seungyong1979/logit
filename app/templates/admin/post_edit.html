@@ -1,0 +1,184 @@
+{% extends "admin/base.html" %}
+{% block title %}{% if mode == 'new' %}새 글 작성{% else %}글 수정{% endif %}{% endblock %}
+
+{% block extra_head %}
+{# EasyMDE 마크다운 에디터 #}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+  <div>
+    <h1 class="admin-page-title">
+      {% if mode == 'new' %}✏️ 새 글 작성{% else %}✏️ 글 수정{% endif %}
+    </h1>
+    {% if post and post.status.value == 'published' %}
+    <a href="/post/{{ post.slug }}" target="_blank" class="admin-page-link">🌐 발행된 글 보기 →</a>
+    {% endif %}
+  </div>
+  {% if post %}
+  <div class="admin-page-actions">
+    <form method="post" action="/admin/posts/{{ post.id }}/publish" style="display:inline">
+      <button class="btn btn-success">🚀 발행하기</button>
+    </form>
+    <form method="post" action="/admin/posts/{{ post.id }}/delete" style="display:inline"
+          onsubmit="return confirm('정말 삭제하시겠습니까?')">
+      <button class="btn btn-danger">🗑️ 삭제</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+{% if request.query_params.get('saved') %}
+<div class="alert alert-success">✅ 저장되었습니다.</div>
+{% endif %}
+
+<form method="post" action="/admin/posts/{% if post %}{{ post.id }}/edit{% else %}new{% endif %}" id="post-form">
+  <div class="edit-layout">
+
+    {# 본문 영역 #}
+    <div class="edit-main">
+      {# 제목 #}
+      <div class="form-group">
+        <label for="post-title" class="form-label">제목 <span class="required">*</span></label>
+        <input type="text" id="post-title" name="title" class="form-input form-input-lg"
+               value="{{ post.title if post else '' }}" required
+               placeholder="글 제목을 입력하세요">
+      </div>
+
+      {# 한줄 요약 #}
+      <div class="form-group">
+        <label for="post-excerpt" class="form-label">한줄 요약 (발췌)</label>
+        <input type="text" id="post-excerpt" name="excerpt" class="form-input"
+               value="{{ post.excerpt if post else '' }}"
+               placeholder="검색 결과와 미리보기에 표시되는 요약 (150자 이내)">
+      </div>
+
+      {# 본문 에디터 #}
+      <div class="form-group">
+        <label for="post-content" class="form-label">본문 <span class="required">*</span></label>
+        <textarea id="post-content" name="content" class="form-textarea" rows="25">{{ post.content if post else '' }}</textarea>
+        <p class="form-hint">HTML 또는 Markdown으로 작성 가능합니다. AI 초안의 경우 그대로 붙여넣기 후 수정하세요.</p>
+      </div>
+    </div>
+
+    {# 사이드바 설정 #}
+    <div class="edit-sidebar">
+
+      {# 발행 설정 #}
+      <div class="edit-panel">
+        <h3 class="edit-panel-title">발행 설정</h3>
+        <div class="form-group">
+          <label for="post-status" class="form-label">상태</label>
+          <select id="post-status" name="status" class="form-select">
+            <option value="draft" {% if not post or post.status.value == 'draft' %}selected{% endif %}>초안 (비공개)</option>
+            <option value="review" {% if post and post.status.value == 'review' %}selected{% endif %}>검수 중</option>
+            <option value="published" {% if post and post.status.value == 'published' %}selected{% endif %}>발행됨 (공개)</option>
+            <option value="archived" {% if post and post.status.value == 'archived' %}selected{% endif %}>보관됨</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-checkbox">
+            <input type="checkbox" name="is_featured" value="true"
+                   {% if post and post.is_featured %}checked{% endif %}>
+            ⭐ 추천 글 (홈 히어로에 표시)
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-full">💾 저장</button>
+        </div>
+      </div>
+
+      {# 카테고리 & 태그 #}
+      <div class="edit-panel">
+        <h3 class="edit-panel-title">분류</h3>
+        <div class="form-group">
+          <label for="post-category" class="form-label">카테고리</label>
+          <select id="post-category" name="category_id" class="form-select">
+            <option value="0">카테고리 선택...</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}"
+                    {% if post and post.category_id == cat.id %}selected{% endif %}>
+              {{ cat.icon }} {{ cat.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="post-tags" class="form-label">태그 (쉼표로 구분)</label>
+          <input type="text" id="post-tags" name="tags_input" class="form-input"
+                 value="{{ tags_input if tags_input is defined else '' }}"
+                 placeholder="AI, ChatGPT, 자동화">
+        </div>
+      </div>
+
+      {# SEO 설정 #}
+      <div class="edit-panel">
+        <h3 class="edit-panel-title">SEO 설정</h3>
+        <div class="form-group">
+          <label for="meta-title" class="form-label">Meta Title</label>
+          <input type="text" id="meta-title" name="meta_title" class="form-input"
+                 value="{{ post.meta_title if post else '' }}"
+                 placeholder="비워두면 제목 사용">
+        </div>
+        <div class="form-group">
+          <label for="meta-desc" class="form-label">Meta Description</label>
+          <textarea id="meta-desc" name="meta_description" class="form-textarea" rows="3"
+                    placeholder="검색 결과에 표시되는 설명 (160자 이내)">{{ post.meta_description if post else '' }}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="og-image" class="form-label">OG 이미지 URL</label>
+          <input type="url" id="og-image" name="og_image" class="form-input"
+                 value="{{ post.og_image if post else '' }}"
+                 placeholder="https://...">
+        </div>
+      </div>
+
+      {# 글 정보 #}
+      {% if post %}
+      <div class="edit-panel">
+        <h3 class="edit-panel-title">글 정보</h3>
+        <ul class="post-info-list">
+          <li><span>ID:</span> <strong>#{{ post.id }}</strong></li>
+          <li><span>슬러그:</span> <code>{{ post.slug }}</code></li>
+          <li><span>읽기 시간:</span> <strong>{{ post.read_time_min }}분</strong></li>
+          <li><span>조회수:</span> <strong>{{ post.view_count }}</strong></li>
+          <li><span>AI 초안:</span> <strong>{{ '예' if post.is_ai_draft else '아니오' }}</strong></li>
+          {% if post.published_at %}
+          <li><span>발행일:</span> <strong>{{ post.published_at.strftime('%Y.%m.%d') }}</strong></li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+  // 마크다운 에디터 (HTML 콘텐츠가 있는 경우 일반 textarea 유지)
+  const contentArea = document.getElementById('post-content');
+  const content = contentArea.value;
+  // HTML 태그가 포함된 경우 EasyMDE 사용 안 함 (HTML 직접 편집)
+  const hasHTML = /<[a-z][\s\S]*>/i.test(content);
+  if (!hasHTML) {
+    const easyMDE = new EasyMDE({
+      element: contentArea,
+      spellChecker: false,
+      autosave: { enabled: true, uniqueId: 'logit-post-{{ post.id if post else "new" }}', delay: 5000 },
+      toolbar: [
+        'bold', 'italic', 'heading', '|',
+        'quote', 'unordered-list', 'ordered-list', '|',
+        'link', 'image', '|',
+        'preview', 'side-by-side', 'fullscreen', '|',
+        'guide'
+      ],
+      placeholder: '본문을 Markdown으로 작성하세요...\n\n## 소제목\n\n내용...',
+    });
+  }
+</script>
+{% endblock %}

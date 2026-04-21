@@ -1,0 +1,45 @@
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a href="/" class="site-logo" aria-label="홈으로">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="#2563eb"/>
+        <path d="M7 8h8M7 12h10M7 16h6M7 20h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="21" cy="19" r="4" fill="#60a5fa"/>
+      </svg>
+      <span class="logo-text">Logit</span>
+    </a>
+
+    <nav class="main-nav" aria-label="주요 네비게이션">
+      {% for cat in sidebar_categories[:6] %}
+      <a href="/category/{{ cat.slug }}" class="nav-link">{{ cat.name }}</a>
+      {% endfor %}
+      <a href="/about" class="nav-link">About</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="search-toggle" class="btn-icon" aria-label="검색 열기">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M13 13l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <button id="mobile-menu-toggle" class="btn-icon mobile-only" aria-label="메뉴 열기" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {# 카테고리 바 #}
+  <div class="category-bar" id="category-bar">
+    <div class="container category-bar-inner">
+      <a href="/" class="cat-bar-link {% if request.url.path == '/' %}active{% endif %}">전체</a>
+      {% for cat in sidebar_categories %}
+      <a href="/category/{{ cat.slug }}" class="cat-bar-link {% if request.url.path == '/category/' + cat.slug %}active{% endif %}">
+        {{ cat.icon }} {{ cat.name }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</header>
