@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initTOC();
   initCategoryBarScroll();
+  initSearchPage();
+  initExternalLinks();
+  initCodeCopy();
+  initLazyImages();
 });
 
 /* ============================================================
@@ -322,6 +326,61 @@ function initTOC() {
 }
 
 /* ============================================================
+   검색 결과 페이지 — URL 쿼리 파라미터 처리
+   (search.html에 인라인 스크립트가 없는 경우 폴백)
+============================================================ */
+function initSearchPage() {
+  const searchPageInput = document.getElementById('searchPageInput');
+  // search.html은 자체 인라인 스크립트로 처리하므로 skip
+  if (!searchPageInput) return;
+  // 인라인 스크립트가 없는 경우에만 진행
+  if (window.__searchInlineInit) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get('q') || '';
+
+  if (q) {
+    searchPageInput.value = q;
+    if (searchPageQuery) searchPageQuery.textContent = `"${q}"`;
+    const results = POSTS_DATA.filter(post =>
+      post.title.toLowerCase().includes(q.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(q.toLowerCase()) ||
+      post.tags.some(t => t.toLowerCase().includes(q.toLowerCase())) ||
+      post.category.toLowerCase().includes(q.toLowerCase())
+    );
+    if (searchPageCount) searchPageCount.textContent = results.length;
+    if (searchPageResults) {
+      if (results.length === 0) {
+        searchPageResults.innerHTML = `
+          <div style="text-align:center; padding:3rem 1rem; color:var(--color-text-muted);">
+            <div style="font-size:2.5rem; margin-bottom:1rem;">🔍</div>
+            <p style="font-size:var(--text-lg); font-weight:600; margin-bottom:0.5rem;">"${q}"에 대한 검색 결과가 없습니다</p>
+            <p style="font-size:var(--text-sm);">다른 키워드로 검색해보세요.</p>
+          </div>`;
+      } else {
+        searchPageResults.innerHTML = results.map(post => `
+          <a href="${post.url}" class="post-card" style="display:block; padding:1.5rem; border:1px solid var(--color-border); border-radius:var(--radius-lg); margin-bottom:1rem; transition:box-shadow 0.2s; background:var(--color-bg);">
+            <div style="font-size:var(--text-xs); color:var(--color-primary); font-weight:600; margin-bottom:0.4rem;">${post.category}</div>
+            <h3 style="font-size:var(--text-lg); font-weight:700; margin-bottom:0.5rem; color:var(--color-text);">${highlightQuery(post.title, q)}</h3>
+            <p style="font-size:var(--text-sm); color:var(--color-text-secondary); line-height:1.6;">${post.excerpt}</p>
+            <div style="margin-top:0.75rem; display:flex; gap:0.4rem; flex-wrap:wrap;">
+              ${post.tags.map(t => `<span style="font-size:11px; padding:2px 8px; background:var(--color-bg-gray); border-radius:99px; color:var(--color-text-secondary);">#${t}</span>`).join('')}
+            </div>
+          </a>`).join('');
+      }
+    }
+  }
+
+  // 검색창 입력 후 엔터
+  searchPageInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = searchPageInput.value.trim();
+      if (val) window.location.href = `search.html?q=${encodeURIComponent(val)}`;
+    }
+  });
+}
+
+/* ============================================================
    카테고리 바 수평 스크롤 화살표 힌트
 ============================================================ */
 function initCategoryBarScroll() {
@@ -367,58 +426,78 @@ function throttle(fn, limit) {
 }
 
 /* ============================================================
-   클립보드 복사 (코드 블록)
+   클립보드 복사 (코드 블록) — DOMContentLoaded 내에서 호출
 ============================================================ */
-document.querySelectorAll('pre code').forEach(block => {
-  const pre = block.parentElement;
-  const btn = document.createElement('button');
-  btn.textContent = '복사';
-  btn.style.cssText = `
-    position: absolute; top: 0.75rem; right: 0.75rem;
-    padding: 4px 10px; font-size: 11px; font-weight: 600;
-    background: rgba(255,255,255,0.1); color: #e2e8f0;
-    border: 1px solid rgba(255,255,255,0.15); border-radius: 4px;
-    cursor: pointer; transition: background 0.15s;
-  `;
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(block.textContent);
-      btn.textContent = '✓ 복사됨';
-      setTimeout(() => (btn.textContent = '복사'), 1500);
-    } catch {
-      btn.textContent = '실패';
-    }
+function initCodeCopy() {
+  document.querySelectorAll('pre code').forEach(block => {
+    const pre = block.parentElement;
+    if (!pre) return;
+    const btn = document.createElement('button');
+    btn.textContent = '복사';
+    btn.setAttribute('aria-label', '코드 복사');
+    btn.style.cssText = `
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      padding: 4px 10px; font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,0.1); color: #e2e8f0;
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 4px;
+      cursor: pointer; transition: background 0.15s; z-index:1;
+    `;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(block.textContent);
+        btn.textContent = '✓ 복사됨';
+        btn.style.background = 'rgba(5,150,105,0.3)';
+        setTimeout(() => {
+          btn.textContent = '복사';
+          btn.style.background = 'rgba(255,255,255,0.1)';
+        }, 1500);
+      } catch {
+        btn.textContent = '실패';
+        setTimeout(() => (btn.textContent = '복사'), 1500);
+      }
+    });
+    pre.style.position = 'relative';
+    pre.appendChild(btn);
   });
-  pre.style.position = 'relative';
-  pre.appendChild(btn);
-});
+}
 
 /* ============================================================
    외부 링크에 rel="noopener noreferrer" 자동 추가
 ============================================================ */
-document.querySelectorAll('a[href^="http"]').forEach(link => {
-  if (!link.href.includes(window.location.hostname)) {
-    link.setAttribute('rel', 'noopener noreferrer');
-    link.setAttribute('target', '_blank');
-  }
-});
+function initExternalLinks() {
+  document.querySelectorAll('a[href^="http"]').forEach(link => {
+    try {
+      const url = new URL(link.href);
+      if (url.hostname !== window.location.hostname) {
+        link.setAttribute('rel', 'noopener noreferrer');
+        if (!link.hasAttribute('target')) {
+          link.setAttribute('target', '_blank');
+        }
+      }
+    } catch {
+      // invalid URL — skip
+    }
+  });
+}
 
 /* ============================================================
    이미지 지연 로딩 (네이티브 lazy loading 지원 없는 경우 폴백)
 ============================================================ */
-if ('IntersectionObserver' in window) {
-  const imgObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        if (img.dataset.src) {
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-          imgObserver.unobserve(img);
+function initLazyImages() {
+  if ('IntersectionObserver' in window) {
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            imgObserver.unobserve(img);
+          }
         }
-      }
-    });
-  }, { rootMargin: '200px 0px' });
+      });
+    }, { rootMargin: '200px 0px' });
 
-  document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
+    document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
+  }
 }

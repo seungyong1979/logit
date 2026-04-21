@@ -7,12 +7,17 @@
   <meta name="description" content="Logit 블로그 검색 결과입니다.">
   <meta name="robots" content="noindex, follow">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="Logit RSS Feed" href="/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <!-- Skip to main content (접근성) -->
+  <a href="#main-content" class="skip-to-main">본문 바로가기</a>
 
   <header class="site-header">
     <div class="container header-inner">
@@ -218,7 +223,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 Logit. 모든 글의 저작권은 운영자에게 있습니다.</p>
+        <p>© 2026 Logit. 모든 글의 저작권은 운영자에게 있습니다.</p>
         <div class="footer-bottom-links">
           <a href="/privacy.html">개인정보처리방침</a>
           <a href="/disclosure.html">광고 고지</a>
@@ -234,17 +239,18 @@
 
   <script src="js/main.js"></script>
   <script>
+    window.__searchInlineInit = true; // main.js와 충돌 방지
     const POSTS = [
-      { title:'ChatGPT로 블로그 글 쓰기: 제대로 하는 방법과 절대 하면 안 되는 것들', category:'AI 활용', excerpt:'AI 글쓰기 도구를 단순 복붙하면 오히려 역효과입니다.', url:'post.html', tags:['ChatGPT','AI','글쓰기','블로그'], date:'2025-04-18', readTime:'8분' },
-      { title:'Make.com vs n8n: 무료로 쓸 수 있는 자동화 도구 실제 비교', category:'자동화', excerpt:'두 도구를 3개월 이상 직접 써본 후기입니다.', url:'post.html', tags:['Make.com','n8n','자동화'], date:'2025-04-15', readTime:'11분' },
-      { title:'Notion 세컨드 브레인 6개월 사용 후기: 진짜 효과 있나?', category:'생산성', excerpt:'화려한 템플릿보다 단순한 구조가 더 오래 지속됩니다.', url:'post.html', tags:['Notion','생산성','지식관리'], date:'2025-04-12', readTime:'9분' },
-      { title:'AdSense 승인받는 데 걸린 시간과 실제로 효과 있었던 것들', category:'수익화 실험', excerpt:'광고 붙이기 전 준비해야 할 것들, 승인까지 걸린 시간 공개.', url:'post.html', tags:['AdSense','블로그수익','수익화'], date:'2025-04-09', readTime:'7분' },
-      { title:'Obsidian으로 지식 관리 시작하는 법: 초보자 가이드', category:'노트/정리법', excerpt:'플러그인 없이 시작하는 Obsidian 기초 가이드.', url:'post.html', tags:['Obsidian','노트','지식관리'], date:'2025-02-18', readTime:'13분' },
-      { title:'Claude vs GPT-4o: 실제 업무에서 써보니 이게 다르더라', category:'AI 활용', excerpt:'두 모델의 실제 사용성 차이를 업무 유형별로 정리했습니다.', url:'post.html', tags:['Claude','GPT-4o','AI','비교'], date:'2025-03-20', readTime:'10분' },
-      { title:'Perplexity AI가 Google 검색을 대체할 수 있을까?', category:'비교/리뷰', excerpt:'3개월 실사용 비교. 검색 패턴에 따라 다릅니다.', url:'post.html', tags:['Perplexity','AI검색','Google'], date:'2025-03-28', readTime:'12분' },
-      { title:'Google Search Console로 내 블로그 글 순위 올리는 방법', category:'블로그 운영', excerpt:'데이터를 보는 방법부터 실제 글 개선까지.', url:'post.html', tags:['SEO','Search Console','블로그운영'], date:'2025-04-01', readTime:'14분' },
-      { title:'Zapier 무료 플랜으로 할 수 있는 업무 자동화 5가지', category:'자동화', excerpt:'유료 전환 없이도 충분히 쓸 만한 자동화 시나리오.', url:'post.html', tags:['Zapier','자동화','무료플랜'], date:'2025-02-25', readTime:'8분' },
-      { title:'1인 블로그로 첫 수익 만들기: 현실적인 6개월 로드맵', category:'수익화 실험', excerpt:'0에서 시작해 첫 수익까지의 현실적인 과정.', url:'post.html', tags:['블로그수익','수익화','로드맵'], date:'2025-03-10', readTime:'15분' },
+      { title:'ChatGPT로 블로그 글 쓰기: 제대로 하는 방법과 절대 하면 안 되는 것들', category:'AI 활용', excerpt:'AI 글쓰기 도구를 단순 복붙하면 오히려 역효과입니다.', url:'post.html', tags:['ChatGPT','AI','글쓰기','블로그'], date:'2026-04-21', readTime:'8분' },
+      { title:'Make.com vs n8n: 무료로 쓸 수 있는 자동화 도구 실제 비교', category:'자동화', excerpt:'두 도구를 3개월 이상 직접 써본 후기입니다.', url:'post.html', tags:['Make.com','n8n','자동화'], date:'2026-04-18', readTime:'11분' },
+      { title:'Notion 세컨드 브레인 6개월 사용 후기: 진짜 효과 있나?', category:'생산성', excerpt:'화려한 템플릿보다 단순한 구조가 더 오래 지속됩니다.', url:'post.html', tags:['Notion','생산성','지식관리'], date:'2026-04-15', readTime:'9분' },
+      { title:'AdSense 승인받는 데 걸린 시간과 실제로 효과 있었던 것들', category:'수익화 실험', excerpt:'광고 붙이기 전 준비해야 할 것들, 승인까지 걸린 시간 공개.', url:'post.html', tags:['AdSense','블로그수익','수익화'], date:'2026-04-08', readTime:'7분' },
+      { title:'Obsidian으로 지식 관리 시작하는 법: 초보자 가이드', category:'노트/정리법', excerpt:'플러그인 없이 시작하는 Obsidian 기초 가이드.', url:'post.html', tags:['Obsidian','노트','지식관리'], date:'2026-02-18', readTime:'13분' },
+      { title:'Claude vs GPT-4o: 실제 업무에서 써보니 이게 다르더라', category:'AI 활용', excerpt:'두 모델의 실제 사용성 차이를 업무 유형별로 정리했습니다.', url:'post.html', tags:['Claude','GPT-4o','AI','비교'], date:'2026-03-20', readTime:'10분' },
+      { title:'Perplexity AI가 Google 검색을 대체할 수 있을까?', category:'비교/리뷰', excerpt:'3개월 실사용 비교. 검색 패턴에 따라 다릅니다.', url:'post.html', tags:['Perplexity','AI검색','Google'], date:'2026-03-28', readTime:'12분' },
+      { title:'Google Search Console로 내 블로그 글 순위 올리는 방법', category:'블로그 운영', excerpt:'데이터를 보는 방법부터 실제 글 개선까지.', url:'post.html', tags:['SEO','Search Console','블로그운영'], date:'2026-04-01', readTime:'14분' },
+      { title:'Zapier 무료 플랜으로 할 수 있는 업무 자동화 5가지', category:'자동화', excerpt:'유료 전환 없이도 충분히 쓸 만한 자동화 시나리오.', url:'post.html', tags:['Zapier','자동화','무료플랜'], date:'2026-02-25', readTime:'8분' },
+      { title:'1인 블로그로 첫 수익 만들기: 현실적인 6개월 로드맵', category:'수익화 실험', excerpt:'0에서 시작해 첫 수익까지의 현실적인 과정.', url:'post.html', tags:['블로그수익','수익화','로드맵'], date:'2026-03-10', readTime:'15분' },
     ];
 
     function doSearch(q) {
