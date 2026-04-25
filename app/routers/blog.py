@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import desc, func, or_
 from app.database import get_db
-from app.models import Post, Category, Tag, PostStatus
+from app.models import Post, Category, Tag, PostStatus, SiteSettings
 from app.utils import paginate, format_date_ko, format_date_iso, strip_html
 from app.config import settings
 
@@ -20,16 +20,25 @@ templates = Jinja2Templates(directory="app/templates")
 
 def get_sidebar_data(db: Session) -> dict:
     """사이드바 공통 데이터"""
-    categories = db.query(Category).order_by(Category.order).all()
-    popular_posts = (
-        db.query(Post)
-        .options(joinedload(Post.category))
-        .filter(Post.status == PostStatus.PUBLISHED)
-        .order_by(desc(Post.view_count))
-        .limit(5)
-        .all()
-    )
-    recent_tags = db.query(Tag).limit(20).all()
+    try:
+        categories = db.query(Category).order_by(Category.order).all()
+    except Exception:
+        categories = []
+    try:
+        popular_posts = (
+            db.query(Post)
+            .options(joinedload(Post.category))
+            .filter(Post.status == PostStatus.PUBLISHED)
+            .order_by(desc(Post.view_count))
+            .limit(5)
+            .all()
+        )
+    except Exception:
+        popular_posts = []
+    try:
+        recent_tags = db.query(Tag).limit(20).all()
+    except Exception:
+        recent_tags = []
     return {
         "sidebar_categories": categories,
         "popular_posts": popular_posts,
@@ -37,19 +46,44 @@ def get_sidebar_data(db: Session) -> dict:
     }
 
 
+def get_site_settings(db: Session) -> dict:
+    """DB의 사이트 설정을 안전하게 로드"""
+    defaults = {
+        "site_author_name": "Logit 운영자",
+        "site_author_bio": "두 아이를 키우고 있는 아빠입니다. 아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다.",
+        "site_author_avatar": "",
+        "adsense_client": "",
+        "adsense_slot_top": "",
+        "adsense_slot_mid": "",
+        "adsense_slot_sidebar": "",
+        "ga_id": "",
+    }
+    try:
+        rows = db.query(SiteSettings).all()
+        for row in rows:
+            defaults[row.key] = row.value
+    except Exception:
+        pass
+    return defaults
+
+
 def common_context(request: Request, db: Session) -> dict:
     """모든 템플릿 공통 컨텍스트"""
+    site = get_site_settings(db)
     return {
         "request": request,
         "site_name": settings.APP_NAME,
         "base_url": settings.BASE_URL,
-        "adsense_client": settings.ADSENSE_CLIENT_ID,
-        "adsense_slot_top": settings.ADSENSE_SLOT_TOP,
-        "adsense_slot_mid": settings.ADSENSE_SLOT_MID,
+        "adsense_client": site.get("adsense_client") or settings.ADSENSE_CLIENT_ID,
+        "adsense_slot_top": site.get("adsense_slot_top") or settings.ADSENSE_SLOT_TOP,
+        "adsense_slot_mid": site.get("adsense_slot_mid") or settings.ADSENSE_SLOT_MID,
         "adsense_slot_bottom": settings.ADSENSE_SLOT_BOTTOM,
-        "adsense_slot_sidebar": settings.ADSENSE_SLOT_SIDEBAR,
-        "ga_id": settings.GA_MEASUREMENT_ID,
+        "adsense_slot_sidebar": site.get("adsense_slot_sidebar") or settings.ADSENSE_SLOT_SIDEBAR,
+        "ga_id": site.get("ga_id") or settings.GA_MEASUREMENT_ID,
         "current_year": datetime.now().year,
+        "site_author_name": site.get("site_author_name", "Logit 운영자"),
+        "site_author_bio": site.get("site_author_bio", ""),
+        "site_author_avatar": site.get("site_author_avatar", ""),
         **get_sidebar_data(db),
     }
 

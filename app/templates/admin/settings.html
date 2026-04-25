@@ -42,23 +42,23 @@
       <input type="hidden" name="section" value="author">
       <div class="form-group">
         <label class="form-label">운영자 이름</label>
-        <input type="text" name="author_name" class="form-input"
-               value="{{ site_settings.get('author_name', '') }}"
+        <input type="text" name="site_author_name" class="form-input"
+               value="{{ site_settings.get('site_author_name', '') }}"
                placeholder="Logit 운영자">
       </div>
       <div class="form-group">
         <label class="form-label">운영자 소개</label>
-        <textarea name="author_bio" class="form-textarea" rows="4"
-                  placeholder="운영자 소개 문구">{{ site_settings.get('author_bio', '') }}</textarea>
+        <textarea name="site_author_bio" class="form-textarea" rows="4"
+                  placeholder="운영자 소개 문구">{{ site_settings.get('site_author_bio', '') }}</textarea>
       </div>
       <div class="form-group">
         <label class="form-label">프로필 이미지 URL</label>
-        <input type="url" name="author_avatar" class="form-input"
-               value="{{ site_settings.get('author_avatar', '') }}"
+        <input type="url" name="site_author_avatar" class="form-input"
+               value="{{ site_settings.get('site_author_avatar', '') }}"
                placeholder="https://...">
         <p class="form-hint">이미지를 Cloudinary나 외부 URL로 업로드 후 URL을 붙여넣으세요.</p>
-        {% if site_settings.get('author_avatar') %}
-        <img src="{{ site_settings.get('author_avatar') }}" alt="프로필" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-top: 8px; border: 2px solid var(--border-color);">
+        {% if site_settings.get('site_author_avatar') %}
+        <img src="{{ site_settings.get('site_author_avatar') }}" alt="프로필" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-top: 8px; border: 2px solid var(--border-color);">
         {% endif %}
       </div>
       <button type="submit" class="btn btn-primary">💾 저장</button>

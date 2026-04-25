@@ -94,11 +94,11 @@ async def dashboard(
     draft_posts = db.query(Post).filter(Post.status == PostStatus.DRAFT).count()
     total_views = db.query(func.sum(Post.view_count)).scalar() or 0
 
-    # 최신 AI 초안 (오늘 생성된 것 포함)
+    # 초안 목록 (AI 여부 무관)
     ai_drafts = (
         db.query(Post)
         .options(joinedload(Post.category))
-        .filter(Post.status == PostStatus.DRAFT, Post.is_ai_draft == True)
+        .filter(Post.status == PostStatus.DRAFT)
         .order_by(desc(Post.created_at))
         .limit(5)
         .all()
@@ -134,13 +134,16 @@ async def dashboard(
         .all()
     )
 
-    # AI 생성 로그 (최근 7개)
-    ai_logs = (
-        db.query(AIGenerationLog)
-        .order_by(desc(AIGenerationLog.created_at))
-        .limit(7)
-        .all()
-    )
+    # AI 생성 로그 (최근 7개, 테이블 없으면 빈 배열)
+    try:
+        ai_logs = (
+            db.query(AIGenerationLog)
+            .order_by(desc(AIGenerationLog.created_at))
+            .limit(7)
+            .all()
+        )
+    except Exception:
+        ai_logs = []
 
     ctx = admin_context(request, admin)
     ctx.update({

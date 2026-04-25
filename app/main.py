@@ -38,31 +38,43 @@ async def lifespan(app: FastAPI):
 
 
 def _seed_initial_data():
-    """최초 실행 시 기본 데이터 삽입 (카테고리, 관리자)"""
+    """최초 실행 시 기본 데이터 삽입 (카테고리, 관리자, 사이트 설정)"""
     from app.models import Category, Admin
     from app.auth import hash_password
     db = SessionLocal()
     try:
-        # 카테고리 초기 데이터
-        if db.query(Category).count() == 0:
-            categories = [
-                Category(name="아이의 돈 공부", slug="kids-money", icon="💰", description="용돈, 소비, 저축, 선택과 책임을 아이의 눈높이로 풀어갑니다.", order=1),
-                Category(name="부모의 교육 고민", slug="education", icon="📚", description="대안교육을 선택한 부모의 시선으로 아이의 배움과 성장을 기록합니다.", order=2),
-                Category(name="부모를 위한 AI 활용", slug="ai-parenting", icon="🤖", description="ChatGPT와 AI 도구를 육아와 교육 자료, 가족 기록에 활용하는 방법을 정리합니다.", order=3),
-                Category(name="책과 도구 리뷰", slug="book-review", icon="📖", description="아이와 부모가 함께 읽기 좋은 책, 교육에 도움이 되는 도구를 소개합니다.", order=4),
-            ]
-            db.add_all(categories)
-            db.commit()
-            logger.info("기본 카테고리 4개 생성 완료")
+        # ── 카테고리: 새 슬러그로 upsert ──────────────────────
+        new_categories = [
+            dict(name="아이의 돈 공부", slug="kids-money", icon="💰",
+                 description="용돈, 소비, 저축, 선택과 책임을 아이의 눈높이로 풀어갑니다.", order=1),
+            dict(name="부모의 교육 고민", slug="education", icon="📚",
+                 description="대안교육을 선택한 부모의 시선으로 아이의 배움과 성장을 기록합니다.", order=2),
+            dict(name="부모를 위한 AI 활용", slug="ai-parenting", icon="🤖",
+                 description="ChatGPT와 AI 도구를 육아와 교육 자료, 가족 기록에 활용하는 방법을 정리합니다.", order=3),
+            dict(name="책과 도구 리뷰", slug="book-review", icon="📖",
+                 description="아이와 부모가 함께 읽기 좋은 책, 교육에 도움이 되는 도구를 소개합니다.", order=4),
+        ]
+        for cat_data in new_categories:
+            existing = db.query(Category).filter(Category.slug == cat_data["slug"]).first()
+            if existing:
+                # 이름/아이콘/설명 최신화
+                existing.name = cat_data["name"]
+                existing.icon = cat_data["icon"]
+                existing.description = cat_data["description"]
+                existing.order = cat_data["order"]
+            else:
+                db.add(Category(**cat_data))
+        db.commit()
+        logger.info("카테고리 초기화/업데이트 완료")
 
-        # 사이트 기본 설정
+        # ── 사이트 기본 설정 ──────────────────────────────────
         from app.models import SiteSettings
         defaults = {
+            "site_author_name": "Logit 운영자",
+            "site_author_bio": "두 아이를 키우고 있는 아빠입니다. 아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다. 이 블로그는 그런 고민의 연장선에서 아이들이 돈과 기술, 배움을 건강하게 이해하도록 돕기 위해 시작했습니다.",
+            "site_author_avatar": "",
             "blog_title": "Logit",
-            "blog_description": "7세와 10세 아이를 키우며 교육, 돈 공부, AI 활용을 함께 고민합니다. 대안교육을 선택한 부모의 시선으로 아이에게 필요한 배움과 도구를 기록합니다.",
-            "author_name": "Logit 운영자",
-            "author_bio": "두 아이를 키우고 있는 아빠입니다. 아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다. 이 블로그는 그런 고민의 연장선에서 아이들이 돈과 기술, 배움을 건강하게 이해하도록 돕기 위해 시작했습니다.",
-            "author_avatar": "",
+            "blog_description": "7세와 10세 아이를 키우며 교육, 돈 공부, AI 활용을 함께 고민합니다.",
             "adsense_client": "",
             "adsense_slot_top": "",
             "adsense_slot_mid": "",
@@ -75,7 +87,7 @@ def _seed_initial_data():
         db.commit()
         logger.info("사이트 기본 설정 초기화 완료")
 
-        # 관리자 계정
+        # ── 관리자 계정 ───────────────────────────────────────
         if db.query(Admin).count() == 0:
             admin = Admin(
                 email=settings.ADMIN_EMAIL,
