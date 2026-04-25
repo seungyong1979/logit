@@ -1,70 +1,97 @@
 {% extends "base.html" %}
-{% block title %}About | {{ site_name }}{% endblock %}
-{% block meta_description %}Logit은 AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그입니다.{% endblock %}
+{% block title %}Logit 소개 | 아이와 함께 배우는 AI 시대의 돈 공부{% endblock %}
+{% block meta_description %}두 아이를 키우는 아빠가 대안교육, 어린이 경제교육, 부모의 AI 활용을 기록하는 블로그 Logit을 소개합니다.{% endblock %}
 
 {% block content %}
 <div class="container">
-  <div class="static-page">
-    <div class="page-hero">
-      <h1 class="page-hero-title">About Logit</h1>
-      <p class="page-hero-desc">실행하는 사람의 기록이 쌓이는 곳</p>
+  <div class="about-page">
+    <div style="margin-bottom: 40px; padding-bottom: 32px; border-bottom: 2px solid var(--color-border);">
+      <span class="hero-badge" style="margin-bottom: 16px; display: inline-block;">✦ 블로그 소개</span>
+      <h1 class="about-title">Logit 소개</h1>
+      <p style="font-size: 1.05rem; color: var(--color-text-sub); line-height: 1.8;">
+        두 아이를 키우는 아빠가 운영하는 기록형 블로그입니다.
+      </p>
     </div>
 
-    <div class="about-grid">
-      <div class="about-main">
-        <section class="about-section">
-          <h2>Logit은 어떤 블로그인가요?</h2>
-          <p>Logit은 AI 도구, 자동화 시스템, 생산성 앱을 <strong>직접 써보고</strong> 솔직하게 정리하는 1인 운영 블로그입니다.</p>
-          <p>인터넷에는 많은 정보가 있지만, 실제로 사용해보지 않고 쓴 글이 너무 많습니다. Logit은 모든 글을 최소 2주 이상 직접 사용한 경험을 바탕으로 작성합니다.</p>
-        </section>
-
-        <section class="about-section">
-          <h2>운영 원칙</h2>
-          <ul class="about-principles">
-            <li>✅ <strong>직접 사용 후 작성:</strong> 모든 리뷰와 가이드는 실제 사용 경험에 근거합니다.</li>
-            <li>✅ <strong>솔직한 평가:</strong> 단점도 빠짐없이 적습니다. 좋은 점만 쓰는 글은 쓰지 않습니다.</li>
-            <li>✅ <strong>광고 명확히 표시:</strong> 유료 광고, 제휴 링크는 반드시 표시합니다.</li>
-            <li>✅ <strong>업데이트 유지:</strong> 정보가 변경되면 글도 업데이트합니다.</li>
-          </ul>
-        </section>
-
-        <section class="about-section">
-          <h2>AI 글쓰기에 대한 입장</h2>
-          <p>Logit은 AI를 글쓰기 도구로 활용하되, <strong>모든 최종 글은 운영자가 직접 검토·편집·보완</strong>합니다.</p>
-          <p>AI가 초안을 생성하면 운영자가 사실 확인, 개인 경험 추가, 표현 다듬기 과정을 거쳐 발행합니다. AI가 생성한 글임을 숨기지 않으며, 해당 글에는 'AI 어시스트' 표시를 달아 투명하게 공개합니다.</p>
-        </section>
-
-        <section class="about-section">
-          <h2>다루는 주제</h2>
-          <div class="about-categories">
-            {% for cat in sidebar_categories %}
-            <a href="/category/{{ cat.slug }}" class="about-cat-chip">{{ cat.icon }} {{ cat.name }}</a>
-            {% endfor %}
-          </div>
-        </section>
-
-        <section class="about-section">
-          <h2>문의 & 협업</h2>
-          <p>블로그 관련 문의, 협업 제안, 오류 제보는 언제든지 환영합니다.</p>
-          <a href="/contact" class="btn btn-primary">문의하기 →</a>
-        </section>
+    {# 운영자 소개 #}
+    <div style="display: flex; align-items: flex-start; gap: 28px; margin-bottom: 48px; padding: 28px; background: var(--color-bg-alt); border-radius: var(--radius-lg);">
+      <div style="flex-shrink: 0;">
+        {% if site_author_avatar %}
+        <img src="{{ site_author_avatar }}" alt="운영자" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-primary);">
+        {% else %}
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-primary-lt); display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 3px solid var(--color-primary);">👨‍👧‍👦</div>
+        {% endif %}
       </div>
+      <div>
+        <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">{{ site_author_name or 'Logit 운영자' }}</h2>
+        <p style="font-size: 0.92rem; color: var(--color-text-sub); line-height: 1.75;">
+          {{ site_author_bio or '두 아이를 키우고 있는 아빠입니다. 대안교육을 선택하며 고민한 배움의 방향을 기록합니다.' }}
+        </p>
+      </div>
+    </div>
 
-      <aside class="about-sidebar">
-        <div class="about-card">
-          <div class="about-avatar" aria-hidden="true">✍️</div>
-          <h3>운영자</h3>
-          <p>AI와 디지털 도구에 관심이 많은 1인 운영자. 매일 아침 새로운 글을 발행합니다.</p>
-        </div>
-        <div class="sidebar-box">
-          <h3 class="sidebar-box-title">카테고리</h3>
-          <ul class="sidebar-cat-list">
-            {% for cat in sidebar_categories %}
-            <li><a href="/category/{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</a></li>
-            {% endfor %}
-          </ul>
-        </div>
-      </aside>
+    <div class="about-content">
+      <p>
+        Logit은 두 아이를 키우는 아빠가 운영하는 기록형 블로그입니다.
+        대안교육을 선택하며 고민한 배움의 방향, 아이와 함께하는 돈 공부,
+        그리고 부모의 삶을 돕는 AI와 디지털 도구를 직접 사용해보고 정리합니다.
+      </p>
+      <p>
+        이곳에서는 아이에게 돈을 어떻게 설명할지, 부모는 AI 시대에 무엇을 배워야 할지,
+        가정에서 어떤 방식으로 배움의 습관을 만들 수 있을지를 함께 고민합니다.
+      </p>
+      <p>
+        전문가처럼 정답을 말하기보다, 실제 부모로서 고민하고 실천한 내용을
+        솔직하게 기록합니다.
+      </p>
+
+      <h2>왜 이 블로그를 시작했나요?</h2>
+      <p>
+        아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다.
+        아이들이 돈을 단순히 많이 버는 수단이 아니라,
+        삶을 이해하고 선택하는 도구로 배웠으면 하는 마음이 이 블로그의 시작이었습니다.
+      </p>
+      <p>
+        AI와 디지털 도구가 빠르게 발전하는 시대에,
+        부모로서 어떤 것을 먼저 배우고 아이에게 전달할 수 있을지도 함께 탐색합니다.
+      </p>
+
+      <h2>주로 다루는 주제</h2>
+      <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 16px 0 24px;">
+        <li style="padding: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+          <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">💰</span>
+          <strong style="display: block; margin-bottom: 4px;">아이의 돈 공부</strong>
+          <span style="font-size: 0.85rem; color: var(--color-text-sub);">용돈, 소비, 저축, 선택과 책임</span>
+        </li>
+        <li style="padding: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+          <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">📚</span>
+          <strong style="display: block; margin-bottom: 4px;">부모의 교육 고민</strong>
+          <span style="font-size: 0.85rem; color: var(--color-text-sub);">대안교육, 가정교육, 아이의 배움</span>
+        </li>
+        <li style="padding: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+          <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">🤖</span>
+          <strong style="display: block; margin-bottom: 4px;">부모를 위한 AI 활용</strong>
+          <span style="font-size: 0.85rem; color: var(--color-text-sub);">ChatGPT, 교육 자료, 가족 기록</span>
+        </li>
+        <li style="padding: 16px; background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+          <span style="font-size: 1.5rem; display: block; margin-bottom: 8px;">📖</span>
+          <strong style="display: block; margin-bottom: 4px;">책과 도구 리뷰</strong>
+          <span style="font-size: 0.85rem; color: var(--color-text-sub);">어린이 경제교육 책, AI 도구</span>
+        </li>
+      </ul>
+
+      <h2>운영 원칙</h2>
+      <p>
+        과장하지 않습니다. 실제로 해보고, 아이와 함께 경험한 내용만 씁니다.
+        광고나 협찬이 있을 경우 반드시 표시합니다.
+        부모의 시선으로, 부모의 언어로 씁니다.
+      </p>
+    </div>
+
+    <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--color-border); display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="/" class="btn btn-primary">홈으로 돌아가기</a>
+      <a href="/category/kids-money" class="btn btn-outline">아이의 돈 공부 보기</a>
+      <a href="/contact" class="btn btn-outline">문의하기</a>
     </div>
   </div>
 </div>

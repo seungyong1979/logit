@@ -3,38 +3,137 @@
 
 {% block content %}
 <div class="admin-page-header">
-  <h1 class="admin-page-title">⚙️ 설정</h1>
+  <h1 class="admin-page-title">⚙️ 블로그 설정</h1>
 </div>
 
+{% if request.query_params.get('saved') %}
+<div class="alert alert-success">✅ 설정이 저장되었습니다.</div>
+{% endif %}
+{% if request.query_params.get('error') %}
+<div class="alert alert-warning">⚠️ 저장 중 오류가 발생했습니다. 다시 시도해 주세요.</div>
+{% endif %}
+
 <div class="settings-grid">
+
+  {# 블로그 기본 정보 #}
   <div class="settings-panel">
-    <h2 class="panel-title">현재 환경 설정</h2>
-    <p class="settings-note">⚠️ 설정을 변경하려면 <code>.env</code> 파일 또는 Render 환경변수를 수정하세요.</p>
+    <h2 class="panel-title">📝 블로그 기본 정보</h2>
+    <form method="post" action="/admin/settings/save" enctype="multipart/form-data">
+      <input type="hidden" name="section" value="blog">
+      <div class="form-group">
+        <label class="form-label">블로그 제목</label>
+        <input type="text" name="blog_title" class="form-input"
+               value="{{ site_settings.get('blog_title', 'Logit') }}"
+               placeholder="Logit">
+      </div>
+      <div class="form-group">
+        <label class="form-label">블로그 소개 (헤더/푸터에 표시)</label>
+        <textarea name="blog_description" class="form-textarea" rows="3"
+                  placeholder="블로그 한줄 소개">{{ site_settings.get('blog_description', '') }}</textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">💾 저장</button>
+    </form>
+  </div>
+
+  {# 운영자 프로필 #}
+  <div class="settings-panel">
+    <h2 class="panel-title">👤 운영자 프로필</h2>
+    <form method="post" action="/admin/settings/save">
+      <input type="hidden" name="section" value="author">
+      <div class="form-group">
+        <label class="form-label">운영자 이름</label>
+        <input type="text" name="author_name" class="form-input"
+               value="{{ site_settings.get('author_name', '') }}"
+               placeholder="Logit 운영자">
+      </div>
+      <div class="form-group">
+        <label class="form-label">운영자 소개</label>
+        <textarea name="author_bio" class="form-textarea" rows="4"
+                  placeholder="운영자 소개 문구">{{ site_settings.get('author_bio', '') }}</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">프로필 이미지 URL</label>
+        <input type="url" name="author_avatar" class="form-input"
+               value="{{ site_settings.get('author_avatar', '') }}"
+               placeholder="https://...">
+        <p class="form-hint">이미지를 Cloudinary나 외부 URL로 업로드 후 URL을 붙여넣으세요.</p>
+        {% if site_settings.get('author_avatar') %}
+        <img src="{{ site_settings.get('author_avatar') }}" alt="프로필" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-top: 8px; border: 2px solid var(--border-color);">
+        {% endif %}
+      </div>
+      <button type="submit" class="btn btn-primary">💾 저장</button>
+    </form>
+  </div>
+
+  {# 구글 애드센스 설정 #}
+  <div class="settings-panel">
+    <h2 class="panel-title">💰 구글 애드센스</h2>
+    <p class="settings-note">애드센스 승인 후 아래 값을 입력하면 광고가 자동으로 표시됩니다.</p>
+    <form method="post" action="/admin/settings/save">
+      <input type="hidden" name="section" value="adsense">
+      <div class="form-group">
+        <label class="form-label">AdSense Client ID</label>
+        <input type="text" name="adsense_client" class="form-input"
+               value="{{ site_settings.get('adsense_client', '') }}"
+               placeholder="ca-pub-XXXXXXXXXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">광고 슬롯 — 상단</label>
+        <input type="text" name="adsense_slot_top" class="form-input"
+               value="{{ site_settings.get('adsense_slot_top', '') }}"
+               placeholder="XXXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">광고 슬롯 — 본문 중간</label>
+        <input type="text" name="adsense_slot_mid" class="form-input"
+               value="{{ site_settings.get('adsense_slot_mid', '') }}"
+               placeholder="XXXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">광고 슬롯 — 사이드바</label>
+        <input type="text" name="adsense_slot_sidebar" class="form-input"
+               value="{{ site_settings.get('adsense_slot_sidebar', '') }}"
+               placeholder="XXXXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Google Analytics ID</label>
+        <input type="text" name="ga_id" class="form-input"
+               value="{{ site_settings.get('ga_id', '') }}"
+               placeholder="G-XXXXXXXXXX">
+      </div>
+      <button type="submit" class="btn btn-primary">💾 저장</button>
+    </form>
+  </div>
+
+  {# 환경 설정 현황 #}
+  <div class="settings-panel">
+    <h2 class="panel-title">🔧 시스템 환경 설정</h2>
+    <p class="settings-note">⚠️ 아래 값은 Render 환경변수에서 변경하세요.</p>
     <table class="admin-table settings-table">
-      <thead><tr><th>변수</th><th>값</th></tr></thead>
+      <thead><tr><th>변수</th><th>상태</th></tr></thead>
       <tbody>
-        <tr><td>APP_NAME</td><td>{{ settings.APP_NAME }}</td></tr>
-        <tr><td>BASE_URL</td><td>{{ settings.BASE_URL }}</td></tr>
         <tr><td>APP_ENV</td><td>{{ settings.APP_ENV }}</td></tr>
-        <tr><td>ADMIN_EMAIL</td><td>{{ settings.ADMIN_EMAIL }}</td></tr>
-        <tr><td>AI_MODEL</td><td>{{ settings.AI_MODEL }}</td></tr>
+        <tr><td>BASE_URL</td><td>{{ settings.BASE_URL }}</td></tr>
+        <tr><td>DATABASE_URL</td><td>{{ '✅ PostgreSQL' if 'postgresql' in settings.DATABASE_URL else '⚠️ SQLite' }}</td></tr>
         <tr><td>OPENAI_API_KEY</td><td>{{ '✅ 설정됨' if settings.OPENAI_API_KEY else '❌ 미설정' }}</td></tr>
-        <tr><td>ADSENSE_CLIENT_ID</td><td>{{ settings.ADSENSE_CLIENT_ID or '미설정' }}</td></tr>
-        <tr><td>GA_MEASUREMENT_ID</td><td>{{ settings.GA_MEASUREMENT_ID or '미설정' }}</td></tr>
-        <tr><td>AI 초안 생성 시간</td><td>매일 {{ settings.AI_DRAFT_SCHEDULE_HOUR }}시 {{ settings.AI_DRAFT_SCHEDULE_MINUTE }}분 (KST)</td></tr>
+        <tr><td>CLOUDINARY</td><td>{{ '✅ 설정됨' if settings.CLOUDINARY_CLOUD_NAME else '❌ 미설정' }}</td></tr>
+        <tr><td>AI 이미지 생성</td><td>{{ '✅ 활성화' if settings.AI_IMAGE_ENABLED else '❌ 비활성화' }}</td></tr>
       </tbody>
     </table>
   </div>
 
+  {# 빠른 링크 #}
   <div class="settings-panel">
-    <h2 class="panel-title">빠른 링크</h2>
+    <h2 class="panel-title">🔗 빠른 링크</h2>
     <ul class="quick-links">
       <li><a href="/" target="_blank">🌐 블로그 홈</a></li>
+      <li><a href="/about" target="_blank">👤 소개 페이지</a></li>
       <li><a href="/rss.xml" target="_blank">📡 RSS 피드</a></li>
       <li><a href="/sitemap.xml" target="_blank">🗺️ 사이트맵</a></li>
       <li><a href="/robots.txt" target="_blank">🤖 robots.txt</a></li>
       <li><a href="/ads.txt" target="_blank">📄 ads.txt</a></li>
     </ul>
   </div>
+
 </div>
 {% endblock %}

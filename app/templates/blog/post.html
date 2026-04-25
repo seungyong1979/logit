@@ -100,9 +100,7 @@
         <span class="post-date">📅 {{ format_date_ko(post.published_at) }}</span>
         <span class="post-read-time">⏱ {{ post.read_time_min }}분 읽기</span>
         <span class="post-views">👁 {{ post.view_count }}</span>
-        {% if post.is_ai_draft %}
-        <span class="badge badge-ai" title="AI가 초안을 작성하고 운영자가 검수·편집했습니다">AI 어시스트</span>
-        {% endif %}
+
       </div>
       {% if post.tags %}
       <div class="post-tags">
@@ -150,10 +148,10 @@
 
     {# 작성자 카드 #}
     <div class="author-card">
-      <div class="author-avatar" aria-hidden="true">✍️</div>
+      <div class="author-avatar" aria-hidden="true">👨‍👧‍👦</div>
       <div class="author-info">
         <h3 class="author-name">Logit 운영자</h3>
-        <p class="author-bio">AI, 자동화, 생산성 도구를 직접 써보고 솔직하게 정리합니다. 모든 리뷰는 직접 사용한 경험에 근거합니다.</p>
+        <p class="author-bio">두 아이를 키우고 있는 아빠입니다. 아이들이 돈과 기술, 배움을 건강하게 이해하도록 돕기 위해 이 블로그를 시작했습니다. 대안교육을 선택한 부모의 시선으로 솔직하게 기록합니다.</p>
         <a href="/about" class="author-link">운영자 소개 보기 →</a>
       </div>
     </div>

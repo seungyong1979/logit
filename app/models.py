@@ -109,6 +109,16 @@ class Admin(Base):
     last_login      = Column(DateTime, nullable=True)
 
 
+# ── 사이트 설정 ─────────────────────────────────────────────
+class SiteSettings(Base):
+    __tablename__ = "site_settings"
+
+    id                  = Column(Integer, primary_key=True, index=True)
+    key                 = Column(String(100), unique=True, nullable=False, index=True)
+    value               = Column(Text, default="")
+    updated_at          = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
 # ── AI 생성 로그 ────────────────────────────────────────────
 class AIGenerationLog(Base):
     __tablename__ = "ai_generation_logs"

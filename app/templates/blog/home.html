@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}{{ site_name }} — 실행하는 사람의 기록{% endblock %}
-{% block meta_description %}AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그. 검증된 정보만 전달합니다.{% endblock %}
+{% block title %}Logit | 아이와 함께 배우는 AI 시대의 돈 공부{% endblock %}
+{% block meta_description %}두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다.{% endblock %}
 
 {% block content %}
 
@@ -9,60 +9,62 @@
 <section class="hero">
   <div class="container hero-inner">
     <div class="hero-text">
-      <span class="hero-badge">✦ 직접 써보고 정리한 실용 정보</span>
-      <h1 class="hero-title">실행하는 사람의<br>기록이 쌓이는 곳</h1>
-      <p class="hero-desc">AI 도구, 자동화 시스템, 생산성 앱을 직접 사용해보고<br>솔직하게 정리한 경험 중심 블로그입니다.</p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <strong>{{ total_posts }}+</strong>
-          <span>발행 글</span>
-        </div>
-        <div class="hero-stat">
-          <strong>{{ sidebar_categories | length }}</strong>
-          <span>카테고리</span>
-        </div>
-        <div class="hero-stat">
-          <strong>매일</strong>
-          <span>새 글 발행</span>
-        </div>
+      <span class="hero-badge">✦ 대안교육을 선택한 아빠의 기록</span>
+      <h1 class="hero-title">아이와 함께 배우는<br>AI 시대의 돈 공부</h1>
+      <p class="hero-desc">대안교육을 선택한 아빠가 아이 교육, 어린이 경제교육,<br class="desktop-only">부모의 AI 활용을 기록합니다.</p>
+      <p class="hero-intro">Logit은 두 아이를 키우는 아빠의 기록형 블로그입니다. 아이들이 돈을 단순히 많이 버는 수단이 아니라, 삶을 이해하고 선택하는 도구로 배웠으면 하는 마음에서 시작했습니다. 교육, 돈 공부, AI 활용을 부모의 시선으로 쉽게 정리합니다.</p>
+      <div class="hero-cta">
+        <a href="/about" class="btn btn-primary">처음 오셨다면 →</a>
+        <a href="/category/kids-money" class="btn btn-outline">아이의 돈 공부 보기</a>
       </div>
     </div>
+  </div>
+</section>
 
-    {% if featured_post %}
-    <div class="hero-featured">
-      <div class="featured-card">
-        <span class="badge badge-primary">FEATURED</span>
-        {% if featured_post.category %}
-        <a href="/category/{{ featured_post.category.slug }}" class="post-category-link">
-          {{ featured_post.category.icon }} {{ featured_post.category.name }}
-        </a>
-        {% endif %}
-        <h2 class="featured-title">
-          <a href="/post/{{ featured_post.slug }}">{{ featured_post.title }}</a>
-        </h2>
-        <p class="featured-excerpt">{{ featured_post.excerpt | truncate(120) }}</p>
-        <div class="post-meta">
-          <span class="post-date">{{ featured_post.published_at.strftime('%Y년 %m월 %d일') if featured_post.published_at else '' }}</span>
-          <span class="post-read-time">{{ featured_post.read_time_min }}분 읽기</span>
-        </div>
-      </div>
+{# ── 카테고리 카드 ─────────────────────────────────────────── #}
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">무엇을 기록하고 있나요?</h2>
+      <p class="section-sub">4가지 주제로 나누어 정리하고 있습니다</p>
     </div>
-    {% endif %}
+    <div class="category-cards-grid">
+      <a href="/category/kids-money" class="category-big-card">
+        <div class="category-big-icon">💰</div>
+        <h3 class="category-big-title">아이의 돈 공부</h3>
+        <p class="category-big-desc">용돈, 소비, 저축, 선택과 책임을 아이의 눈높이로 풀어갑니다.</p>
+        <span class="category-big-link">글 보기 →</span>
+      </a>
+      <a href="/category/education" class="category-big-card">
+        <div class="category-big-icon">📚</div>
+        <h3 class="category-big-title">부모의 교육 고민</h3>
+        <p class="category-big-desc">대안교육을 선택한 부모의 시선으로 아이의 배움과 성장에 대해 기록합니다.</p>
+        <span class="category-big-link">글 보기 →</span>
+      </a>
+      <a href="/category/ai-parenting" class="category-big-card">
+        <div class="category-big-icon">🤖</div>
+        <h3 class="category-big-title">부모를 위한 AI 활용</h3>
+        <p class="category-big-desc">ChatGPT와 AI 도구를 부모의 일상, 교육 자료, 가족 기록에 활용하는 방법을 정리합니다.</p>
+        <span class="category-big-link">글 보기 →</span>
+      </a>
+      <a href="/category/book-review" class="category-big-card">
+        <div class="category-big-icon">📖</div>
+        <h3 class="category-big-title">책과 도구 리뷰</h3>
+        <p class="category-big-desc">아이와 부모가 함께 읽기 좋은 책, 교육에 도움이 되는 도구를 소개합니다.</p>
+        <span class="category-big-link">글 보기 →</span>
+      </a>
+    </div>
   </div>
 </section>
 
 {# ── 최신 글 ─────────────────────────────────────────────── #}
-<section class="section">
+{% if latest_posts %}
+<section class="section section-alt">
   <div class="container">
     <div class="section-header">
-      <div>
-        <h2 class="section-title">최신 글</h2>
-        <p class="section-sub">최근에 작성한 글들입니다</p>
-      </div>
-      <a href="/categories" class="btn btn-outline">전체 보기 →</a>
+      <h2 class="section-title">최근 글</h2>
+      <p class="section-sub">새롭게 올라온 글들입니다</p>
     </div>
-
-    {% if latest_posts %}
     <div class="post-grid">
       {% for post in latest_posts %}
       <article class="post-card">
@@ -83,24 +85,20 @@
           <p class="post-card-excerpt">{{ post.excerpt | truncate(100) }}</p>
           <div class="post-meta">
             <span class="post-date">{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else '' }}</span>
-            <span class="post-read-time">{{ post.read_time_min }}분</span>
+            <span class="post-read-time">{{ post.read_time_min }}분 읽기</span>
           </div>
         </div>
       </article>
       {% endfor %}
     </div>
-    {% else %}
-    <div class="empty-state">
-      <p>아직 발행된 글이 없습니다. 곧 첫 글이 올라올 예정입니다!</p>
-    </div>
-    {% endif %}
   </div>
 </section>
+{% endif %}
 
-{# ── 광고 슬롯 (상단) ─────────────────────────────────────── #}
+{# ── 광고 슬롯 ─────────────────────────────────────────────── #}
 {% if adsense_client and adsense_slot_top %}
 <div class="container ad-section">
-  <div class="ad-slot" data-slot="top">
+  <div class="ad-slot">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="{{ adsense_client }}"
@@ -110,73 +108,82 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 </div>
-{% else %}
-<div class="container">
-  <div class="ad-slot ad-placeholder">
-    <span class="ad-placeholder-label">광고 영역</span>
-  </div>
-</div>
 {% endif %}
 
-{# ── 인기 글 ─────────────────────────────────────────────── #}
-{% if popular_posts %}
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">🔥 인기 글</h2>
-    </div>
-    <div class="popular-list">
-      {% for post in popular_posts %}
-      <article class="popular-item">
-        <span class="popular-rank">{{ loop.index }}</span>
-        <div class="popular-body">
-          {% if post.category %}
-          <a href="/category/{{ post.category.slug }}" class="post-category-link">{{ post.category.icon }} {{ post.category.name }}</a>
-          {% endif %}
-          <h3 class="popular-title">
-            <a href="/post/{{ post.slug }}">{{ post.title }}</a>
-          </h3>
-          <div class="post-meta">
-            <span class="post-date">{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else '' }}</span>
-            <span class="post-views">👁 {{ post.view_count }}</span>
-          </div>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
-
-{# ── 카테고리 목록 ─────────────────────────────────────────── #}
+{# ── 추천 글 ─────────────────────────────────────────────── #}
 <section class="section">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">카테고리</h2>
+      <h2 class="section-title">📌 추천 글</h2>
+      <p class="section-sub">처음 방문하셨다면 이 글부터 읽어보세요</p>
     </div>
-    <div class="category-grid">
-      {% for cat in sidebar_categories %}
-      <a href="/category/{{ cat.slug }}" class="category-card">
-        <span class="category-icon">{{ cat.icon }}</span>
-        <div class="category-info">
-          <h3 class="category-name">{{ cat.name }}</h3>
-          <p class="category-desc">{{ cat.description | truncate(40) }}</p>
+    {% if latest_posts and latest_posts | length > 0 %}
+    <div class="recommend-list">
+      {% for post in latest_posts[:6] %}
+      <a href="/post/{{ post.slug }}" class="recommend-item">
+        <div class="recommend-icon">
+          {% if post.category %}{{ post.category.icon }}{% else %}📝{% endif %}
+        </div>
+        <div class="recommend-body">
+          <span class="recommend-cat">{% if post.category %}{{ post.category.name }}{% endif %}</span>
+          <h4 class="recommend-title">{{ post.title }}</h4>
+          <span class="recommend-date">{{ post.published_at.strftime('%Y.%m.%d') if post.published_at else '' }}</span>
         </div>
       </a>
       {% endfor %}
     </div>
+    {% else %}
+    {# 글이 없을 때 임시 추천 글 카드 #}
+    <div class="recommend-list">
+      {% set dummy_posts = [
+        {"icon": "📚", "cat": "부모의 교육 고민", "title": "대안교육을 선택한 아빠가 이 블로그를 시작한 이유"},
+        {"icon": "💰", "cat": "아이의 돈 공부", "title": "7세 아이에게 돈을 어떻게 설명할까?"},
+        {"icon": "💰", "cat": "아이의 돈 공부", "title": "10세 아이와 함께 시작하는 용돈 교육"},
+        {"icon": "🤖", "cat": "부모를 위한 AI 활용", "title": "AI 시대에 부모의 역할은 어떻게 달라질까?"},
+        {"icon": "🤖", "cat": "부모를 위한 AI 활용", "title": "ChatGPT로 아이 질문에 쉽게 답하는 방법"},
+        {"icon": "📖", "cat": "책과 도구 리뷰", "title": "아이와 함께 읽기 좋은 경제교육 책 추천"},
+      ] %}
+      {% for post in dummy_posts %}
+      <div class="recommend-item recommend-item-dummy">
+        <div class="recommend-icon">{{ post.icon }}</div>
+        <div class="recommend-body">
+          <span class="recommend-cat">{{ post.cat }}</span>
+          <h4 class="recommend-title">{{ post.title }}</h4>
+          <span class="recommend-date">곧 올라올 예정</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
 </section>
 
-{# ── 운영자 소개 스트립 ────────────────────────────────────── #}
-<section class="editor-strip">
-  <div class="container editor-strip-inner">
-    <div class="editor-icon">✍️</div>
-    <div class="editor-text">
-      <h2>직접 써보고, 정리하고, 공유합니다</h2>
-      <p>Logit은 1인 운영 블로그입니다. 모든 글은 실제 사용 경험을 바탕으로 작성됩니다.<br>
-         광고나 협찬 목적의 과장된 표현 없이, 솔직한 정보만 전달합니다.</p>
-      <a href="/about" class="btn btn-primary">운영자 소개 보기 →</a>
+{# ── 운영자 소개 ────────────────────────────────────────────── #}
+<section class="author-strip">
+  <div class="container author-strip-inner">
+    <div class="author-avatar-wrap">
+      {% if site_author_avatar %}
+      <img src="{{ site_author_avatar }}" alt="운영자" class="author-avatar-img">
+      {% else %}
+      <div class="author-avatar-placeholder">👨‍👧‍👦</div>
+      {% endif %}
+    </div>
+    <div class="author-text">
+      <h2>안녕하세요, Logit 운영자입니다</h2>
+      <p>두 아이를 키우고 있는 아빠입니다. 아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다. 이 블로그는 그런 고민의 연장선에서 아이들이 돈과 기술, 배움을 건강하게 이해하도록 돕기 위해 시작했습니다.</p>
+      <a href="/about" class="btn btn-primary">자세한 소개 보기 →</a>
+    </div>
+  </div>
+</section>
+
+{# ── 뉴스레터 (준비 중) ────────────────────────────────────── #}
+<section class="section section-alt">
+  <div class="container">
+    <div class="newsletter-box">
+      <div class="newsletter-icon">📬</div>
+      <h3 class="newsletter-title">뉴스레터 구독</h3>
+      <p class="newsletter-desc">새 글이 올라오면 알림을 드릴 예정입니다.<br>현재 준비 중입니다. 조금만 기다려 주세요.</p>
+      <span class="newsletter-badge">곧 준비 중입니다</span>
     </div>
   </div>
 </section>

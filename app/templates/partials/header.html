@@ -2,18 +2,20 @@
   <div class="container header-inner">
     <a href="/" class="site-logo" aria-label="홈으로">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-        <rect width="28" height="28" rx="6" fill="#2563eb"/>
+        <rect width="28" height="28" rx="6" fill="#4a7c59"/>
         <path d="M7 8h8M7 12h10M7 16h6M7 20h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="21" cy="19" r="4" fill="#60a5fa"/>
+        <circle cx="21" cy="19" r="4" fill="#a8d5b5"/>
       </svg>
       <span class="logo-text">Logit</span>
     </a>
 
     <nav class="main-nav" aria-label="주요 네비게이션">
-      {% for cat in sidebar_categories[:6] %}
-      <a href="/category/{{ cat.slug }}" class="nav-link">{{ cat.name }}</a>
-      {% endfor %}
-      <a href="/about" class="nav-link">About</a>
+      <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">홈</a>
+      <a href="/category/kids-money" class="nav-link {% if 'kids-money' in request.url.path %}active{% endif %}">아이의 돈 공부</a>
+      <a href="/category/education" class="nav-link {% if 'education' in request.url.path %}active{% endif %}">부모의 교육 고민</a>
+      <a href="/category/ai-parenting" class="nav-link {% if 'ai-parenting' in request.url.path %}active{% endif %}">부모를 위한 AI 활용</a>
+      <a href="/category/book-review" class="nav-link {% if 'book-review' in request.url.path %}active{% endif %}">책과 도구 리뷰</a>
+      <a href="/about" class="nav-link {% if request.url.path == '/about' %}active{% endif %}">소개</a>
     </nav>
 
     <div class="header-actions">
@@ -31,15 +33,16 @@
     </div>
   </div>
 
-  {# 카테고리 바 #}
-  <div class="category-bar" id="category-bar">
-    <div class="container category-bar-inner">
-      <a href="/" class="cat-bar-link {% if request.url.path == '/' %}active{% endif %}">전체</a>
-      {% for cat in sidebar_categories %}
-      <a href="/category/{{ cat.slug }}" class="cat-bar-link {% if request.url.path == '/category/' + cat.slug %}active{% endif %}">
-        {{ cat.icon }} {{ cat.name }}
-      </a>
-      {% endfor %}
+  {# 모바일 드롭다운 메뉴 #}
+  <div class="mobile-menu" id="mobile-menu" style="display:none;">
+    <div class="container mobile-menu-inner">
+      <a href="/" class="mobile-nav-link">🏠 홈</a>
+      <a href="/category/kids-money" class="mobile-nav-link">💰 아이의 돈 공부</a>
+      <a href="/category/education" class="mobile-nav-link">📚 부모의 교육 고민</a>
+      <a href="/category/ai-parenting" class="mobile-nav-link">🤖 부모를 위한 AI 활용</a>
+      <a href="/category/book-review" class="mobile-nav-link">📖 책과 도구 리뷰</a>
+      <a href="/about" class="mobile-nav-link">👤 소개</a>
+      <a href="/contact" class="mobile-nav-link">✉️ 문의</a>
     </div>
   </div>
 </header>

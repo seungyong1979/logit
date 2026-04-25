@@ -46,18 +46,34 @@ def _seed_initial_data():
         # 카테고리 초기 데이터
         if db.query(Category).count() == 0:
             categories = [
-                Category(name="AI 활용", slug="ai", icon="🤖", description="ChatGPT, Claude 등 AI 도구 실용 가이드", order=1),
-                Category(name="자동화", slug="automation", icon="⚙️", description="Make.com, Zapier, n8n으로 업무 자동화", order=2),
-                Category(name="생산성", slug="productivity", icon="⚡", description="시간 관리, 집중력, 업무 효율 향상", order=3),
-                Category(name="디지털 도구", slug="tools", icon="🛠️", description="앱·서비스 실사용 리뷰와 비교", order=4),
-                Category(name="블로그 운영", slug="blog-ops", icon="📊", description="SEO, 콘텐츠 전략, 수익화", order=5),
-                Category(name="수익화 실험", slug="monetize", icon="💰", description="AdSense, 제휴 마케팅 실전 기록", order=6),
-                Category(name="노트/정리법", slug="notes", icon="📝", description="지식 관리, 노트 시스템, Obsidian", order=7),
-                Category(name="비교/리뷰", slug="review", icon="⚖️", description="도구와 서비스 심층 비교 분석", order=8),
+                Category(name="아이의 돈 공부", slug="kids-money", icon="💰", description="용돈, 소비, 저축, 선택과 책임을 아이의 눈높이로 풀어갑니다.", order=1),
+                Category(name="부모의 교육 고민", slug="education", icon="📚", description="대안교육을 선택한 부모의 시선으로 아이의 배움과 성장을 기록합니다.", order=2),
+                Category(name="부모를 위한 AI 활용", slug="ai-parenting", icon="🤖", description="ChatGPT와 AI 도구를 육아와 교육 자료, 가족 기록에 활용하는 방법을 정리합니다.", order=3),
+                Category(name="책과 도구 리뷰", slug="book-review", icon="📖", description="아이와 부모가 함께 읽기 좋은 책, 교육에 도움이 되는 도구를 소개합니다.", order=4),
             ]
             db.add_all(categories)
             db.commit()
-            logger.info("기본 카테고리 8개 생성 완료")
+            logger.info("기본 카테고리 4개 생성 완료")
+
+        # 사이트 기본 설정
+        from app.models import SiteSettings
+        defaults = {
+            "blog_title": "Logit",
+            "blog_description": "7세와 10세 아이를 키우며 교육, 돈 공부, AI 활용을 함께 고민합니다. 대안교육을 선택한 부모의 시선으로 아이에게 필요한 배움과 도구를 기록합니다.",
+            "author_name": "Logit 운영자",
+            "author_bio": "두 아이를 키우고 있는 아빠입니다. 아이를 키우며 교육 문제를 오래 고민했고, 그 과정에서 대안교육을 선택했습니다. 이 블로그는 그런 고민의 연장선에서 아이들이 돈과 기술, 배움을 건강하게 이해하도록 돕기 위해 시작했습니다.",
+            "author_avatar": "",
+            "adsense_client": "",
+            "adsense_slot_top": "",
+            "adsense_slot_mid": "",
+            "adsense_slot_sidebar": "",
+            "ga_id": "",
+        }
+        for key, value in defaults.items():
+            if not db.query(SiteSettings).filter(SiteSettings.key == key).first():
+                db.add(SiteSettings(key=key, value=value))
+        db.commit()
+        logger.info("사이트 기본 설정 초기화 완료")
 
         # 관리자 계정
         if db.query(Admin).count() == 0:
@@ -78,7 +94,7 @@ def _seed_initial_data():
 
 app = FastAPI(
     title="Logit Blog",
-    description="AI + 자동화 + 생산성 블로그",
+    description="두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 기록하는 블로그",
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/admin/api-docs" if settings.DEBUG else None,

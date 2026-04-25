@@ -88,7 +88,7 @@ async def home(request: Request, db: Session = Depends(get_db)):
 
     ctx = common_context(request, db)
     ctx.update({
-        "page_title": f"{settings.APP_NAME} — 실행하는 사람의 기록",
+        "page_title": f"{settings.APP_NAME} | 아이와 함께 배우는 AI 시대의 돈 공부",
         "latest_posts": latest_posts,
         "featured_post": featured_post,
         "popular_posts": popular_posts,
@@ -262,8 +262,8 @@ async def search(
 async def about(request: Request, db: Session = Depends(get_db)):
     ctx = common_context(request, db)
     ctx.update({
-        "page_title": f"About | {settings.APP_NAME}",
-        "meta_description": "Logit은 AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그입니다.",
+        "page_title": f"소개 | {settings.APP_NAME}",
+        "meta_description": "두 아이를 키우는 아빠가 대안교육, 어린이 경제교육, 부모의 AI 활용을 기록하는 블로그 Logit을 소개합니다.",
         "canonical_url": f"{settings.BASE_URL}/about",
     })
     return templates.TemplateResponse("blog/about.html", ctx)
@@ -322,7 +322,7 @@ async def rss_feed(db: Session = Depends(get_db)):
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = settings.APP_NAME
     ET.SubElement(channel, "link").text = settings.BASE_URL
-    ET.SubElement(channel, "description").text = "AI, 자동화, 생산성 실용 정보 블로그"
+    ET.SubElement(channel, "description").text = "두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다."
     ET.SubElement(channel, "language").text = "ko"
     ET.SubElement(channel, "lastBuildDate").text = datetime.now(timezone.utc).strftime(
         "%a, %d %b %Y %H:%M:%S +0000"

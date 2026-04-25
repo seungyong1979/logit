@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{{ page_title | default(site_name) }}{% endblock %}</title>
-  <meta name="description" content="{% block meta_description %}{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}{% endblock %}">
+  <meta name="description" content="{% block meta_description %}{{ meta_description | default('두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다.') }}{% endblock %}">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Logit 운영자">
 
@@ -12,7 +12,7 @@
   <meta property="og:type" content="{% block og_type %}website{% endblock %}">
   <meta property="og:site_name" content="{{ site_name }}">
   <meta property="og:title" content="{% block og_title %}{{ page_title | default(site_name) }}{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ meta_description | default('두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다.') }}{% endblock %}">
   <meta property="og:image" content="{% block og_image %}{{ base_url }}/static/images/og-default.png{% endblock %}">
   <meta property="og:url" content="{% block og_url %}{{ canonical_url | default(base_url) }}{% endblock %}">
   <meta property="og:locale" content="ko_KR">
@@ -20,7 +20,7 @@
   {# Twitter Card #}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ page_title | default(site_name) }}">
-  <meta name="twitter:description" content="{{ meta_description | default('AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그') }}">
+  <meta name="twitter:description" content="{{ meta_description | default('두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다.') }}">
   <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png">
 
   {# Canonical & RSS #}
@@ -40,7 +40,7 @@
   {# CSS #}
   <link rel="stylesheet" href="/static/css/style.css">
 
-  {# Google Analytics (활성화 후 ID 입력) #}
+  {# Google Analytics #}
   {% if ga_id %}
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
   <script>
@@ -51,7 +51,7 @@
   </script>
   {% endif %}
 
-  {# AdSense (퍼블리셔 ID 입력 후 주석 해제) #}
+  {# AdSense #}
   {% if adsense_client %}
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client }}" crossorigin="anonymous"></script>
   {% endif %}
@@ -65,7 +65,7 @@
     "@type": "WebSite",
     "name": "{{ site_name }}",
     "url": "{{ base_url }}",
-    "description": "AI, 자동화, 생산성 도구를 직접 써보고 정리하는 실용 정보 블로그",
+    "description": "두 아이를 키우는 아빠가 아이 교육, 어린이 경제교육, 부모의 AI 활용을 공부하고 기록하는 블로그입니다.",
     "inLanguage": "ko",
     "potentialAction": {
       "@type": "SearchAction",
@@ -116,10 +116,12 @@
         <button id="mobile-nav-close" class="mobile-nav-close" aria-label="메뉴 닫기">✕</button>
       </div>
       <nav class="mobile-nav-links">
-        {% for cat in sidebar_categories %}
-        <a href="/category/{{ cat.slug }}">{{ cat.icon }} {{ cat.name }}</a>
-        {% endfor %}
-        <a href="/about">👤 About</a>
+        <a href="/">🏠 홈</a>
+        <a href="/category/kids-money">💰 아이의 돈 공부</a>
+        <a href="/category/education">📚 부모의 교육 고민</a>
+        <a href="/category/ai-parenting">🤖 부모를 위한 AI 활용</a>
+        <a href="/category/book-review">📖 책과 도구 리뷰</a>
+        <a href="/about">👤 소개</a>
         <a href="/contact">✉️ 문의</a>
       </nav>
     </div>

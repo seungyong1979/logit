@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import desc, func
 from app.database import get_db
-from app.models import Post, Category, Tag, Admin, AIGenerationLog, PostStatus
+from app.models import Post, Category, Tag, Admin, AIGenerationLog, PostStatus, SiteSettings
 from app.auth import (
     verify_password, hash_password, create_access_token,
     require_admin, get_current_admin_optional,
@@ -514,6 +514,35 @@ async def admin_settings(
     admin: Admin = Depends(require_admin),
     db: Session = Depends(get_db),
 ):
+    # DB에서 사이트 설정 불러오기
+    rows = db.query(SiteSettings).all()
+    site_settings = {row.key: row.value for row in rows}
     ctx = admin_context(request, admin)
-    ctx.update({"settings": settings})
+    ctx.update({"settings": settings, "site_settings": site_settings})
     return templates.TemplateResponse("admin/settings.html", ctx)
+
+
+@router.post("/settings/save")
+async def admin_settings_save(
+    request: Request,
+    section: str = Form(""),
+    admin: Admin = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    form = await request.form()
+    # section 외 모든 폼 값 저장
+    skip = {"section"}
+    try:
+        for key, value in form.items():
+            if key in skip:
+                continue
+            row = db.query(SiteSettings).filter(SiteSettings.key == key).first()
+            if row:
+                row.value = value
+            else:
+                db.add(SiteSettings(key=key, value=value))
+        db.commit()
+        return RedirectResponse("/admin/settings?saved=1", status_code=302)
+    except Exception as e:
+        db.rollback()
+        return RedirectResponse("/admin/settings?error=1", status_code=302)
